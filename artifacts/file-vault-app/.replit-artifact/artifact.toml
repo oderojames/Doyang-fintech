@@ -1,0 +1,31 @@
+kind = "web"
+previewPath = "/__stub/"
+title = "File Vault (stub)"
+version = "1.0.0"
+id = "artifacts/file-vault-app"
+router = "path"
+
+[[integratedSkills]]
+name = "react-vite"
+version = "1.0.0"
+
+[[services]]
+name = "web"
+paths = [ "/__stub/" ]
+localPort = 18854
+
+[services.development]
+run = "pnpm --filter @workspace/file-vault-app run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/file-vault-app", "run", "build" ]
+publicDir = "artifacts/file-vault-app/dist/public"
+serve = "static"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "18854"
+BASE_PATH = "/__stub/"
