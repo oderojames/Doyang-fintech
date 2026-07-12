@@ -525,7 +525,7 @@ router.post("/orders", async (req, res) => {
           amount: Math.round(sellerAmount * 100),
           recipient: recipientCode,
           currency: "KES",
-          reason: `Doyang order ${orderId}`,
+          reason: `${String(product.title).slice(0, 40)} sold for KES ${productPrice.toLocaleString("en-KE", { maximumFractionDigits: 0 })}`,
         });
         if (transferData.status && transferData.data?.reference) {
           transferRef = transferData.data.reference;
