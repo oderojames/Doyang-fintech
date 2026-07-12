@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
+import { createPortal } from 'react-dom';
 import { Bell, CreditCard, X, CheckCircle2, XCircle, Loader2, Banknote, Zap, RefreshCw, ChevronDown, Store, Upload, ShoppingBag } from 'lucide-react';
 import { doc, updateDoc } from 'firebase/firestore';
 import { db, auth } from '@/lib/firebase';
@@ -232,7 +233,7 @@ export default function NotificationCenter({
         )}
       </button>
 
-      {open && (
+      {open && createPortal(
         <div
           ref={panelRef}
           className="fixed inset-0 z-[200] bg-background flex flex-col"
@@ -378,7 +379,8 @@ export default function NotificationCenter({
                 </>
               )}
             </div>
-        </div>
+        </div>,
+        document.body
       )}
     </div>
   );
