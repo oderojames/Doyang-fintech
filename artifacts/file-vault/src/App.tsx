@@ -19,6 +19,8 @@ import ContactWidget from "@/components/ContactWidget";
 import Chatbot from "@/components/Chatbot";
 import PWAInstallPrompt from "@/components/PWAInstallPrompt";
 import NotFound from "@/pages/not-found";
+import PrivacyPolicy from "@/pages/PrivacyPolicy";
+import TermsOfUse from "@/pages/TermsOfUse";
 import { Building2, ShieldCheck, Mail, RefreshCw, CheckCircle2, AlertCircle } from "lucide-react";
 
 const queryClient = new QueryClient();
@@ -275,6 +277,8 @@ function Router() {
       <Route path="/retailer" component={RetailerPortal} />
       <Route path="/wholesaler" component={WholesalerPage} />
       <Route path="/buyer" component={BuyerPortal} />
+      <Route path="/privacy" component={PrivacyPolicy} />
+      <Route path="/terms" component={TermsOfUse} />
       <Route component={NotFound} />
     </Switch>
   );
