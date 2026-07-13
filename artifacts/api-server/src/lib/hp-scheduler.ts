@@ -1,5 +1,5 @@
 import { getAdminFirestore } from "./firebase-admin.js";
-import { chargeAuthorization } from "./paystack.js";
+import { chargeAuthorization, transferToMpesaWallet } from "./paystack.js";
 
 const MAX_RETRY_ATTEMPTS = 3;
 const RETRY_INTERVALS_DAYS = [1, 3, 7];
@@ -114,7 +114,31 @@ async function processHpInstallment(orderRef: any, repayRef: any, order: any, re
     const totalAmount = Number(repay.amount);
     const sellerShare = Math.round(totalAmount * 0.9 * 100) / 100;
     const platformShare = Math.round((totalAmount - sellerShare) * 100) / 100;
-    const settlementStatus = splitCode ? "settled" : "pending_subaccount";
+    let settlementStatus = splitCode ? "settled" : "pending_subaccount";
+    let mpesaTransferRef: string | null = null;
+
+    if (!splitCode) {
+      const sellerSnap = await db.collection("users").doc(order.sellerId as string).get();
+      const sellerData = sellerSnap.data();
+      const wallet = sellerData?.verifiedMpesaWallet as string | undefined;
+      if (wallet) {
+        const payout = await transferToMpesaWallet(
+          wallet,
+          (sellerData?.displayName as string | undefined) || "Seller",
+          sellerShare,
+          `HP installment #${repay.installmentNumber as number} - ${String(order.productTitle ?? "item").slice(0, 25)}`
+        );
+        if (payout.success) {
+          mpesaTransferRef = payout.reference ?? null;
+          settlementStatus = "settled_mpesa";
+          console.log(`[hp-scheduler] ✓ Mobile wallet payout sent to seller ${order.sellerId}: KES ${sellerShare} (ref: ${mpesaTransferRef})`);
+        } else {
+          console.warn(`[hp-scheduler] Mobile wallet payout FAILED for seller ${order.sellerId}: ${payout.error}`);
+        }
+      } else {
+        console.warn(`[hp-scheduler] Seller ${order.sellerId} has no subaccount AND no verifiedMpesaWallet — payout cannot be sent`);
+      }
+    }
 
     await repayRef.update({
       status: "paid",
@@ -125,6 +149,7 @@ async function processHpInstallment(orderRef: any, repayRef: any, order: any, re
       sellerShare,
       platformShare,
       settlementStatus,
+      mpesaTransferRef,
     });
 
     console.log(
