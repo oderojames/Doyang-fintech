@@ -36,6 +36,7 @@ interface LoanOffer {
   id: string;
   retailerName: string;
   retailerEmail: string;
+  retailerPhone?: string;
   principal: number;
   interestRate: number;
   interestType: 'flat' | 'reducing';
@@ -271,11 +272,25 @@ function LoanCard({ offer }: LoanCardProps) {
         )}
 
         {isDefaulted && (
-          <div className="flex items-center gap-2 rounded-lg bg-red-500/5 border border-red-500/20 px-3 py-2">
-            <TriangleAlert size={11} className="text-red-400 shrink-0" />
-            <p className="text-xs text-foreground">
-              Loan defaulted{offer.defaultedAt ? ` on ${fmt(offer.defaultedAt)}` : ''} — all repayment retries exhausted.
-            </p>
+          <div className="flex flex-col gap-2 rounded-lg bg-red-500/5 border border-red-500/20 px-3 py-2">
+            <div className="flex items-center gap-2">
+              <TriangleAlert size={11} className="text-red-400 shrink-0" />
+              <p className="text-xs text-foreground">
+                Loan defaulted{offer.defaultedAt ? ` on ${fmt(offer.defaultedAt)}` : ''} — all repayment retries exhausted.
+              </p>
+            </div>
+            <div className="flex flex-col gap-1 pl-[19px]">
+              {offer.retailerPhone && (
+                <a href={`tel:${offer.retailerPhone}`} className="text-xs text-primary hover:underline">
+                  📞 {offer.retailerPhone}
+                </a>
+              )}
+              {offer.retailerEmail && (
+                <a href={`mailto:${offer.retailerEmail}`} className="text-xs text-primary hover:underline">
+                  ✉️ {offer.retailerEmail}
+                </a>
+              )}
+            </div>
           </div>
         )}
 

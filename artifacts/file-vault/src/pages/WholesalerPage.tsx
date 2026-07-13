@@ -562,7 +562,7 @@ function RetailersManagedTab({ wholesalerUid }: { wholesalerUid: string }) {
                         {r.retailerUid && (
                           <div className="border-t border-border px-5 py-3">
                             <button
-                              onClick={() => setOfferTarget({ id: r.id, retailerUid: r.retailerUid!, retailerName: r.retailerName, retailerEmail: r.retailerEmail, score: r.score, grade: r.grade, label: r.label, creditLimit: r.creditLimit })}
+                              onClick={() => setOfferTarget({ id: r.id, retailerUid: r.retailerUid!, retailerName: r.retailerName, retailerEmail: r.retailerEmail, retailerPhone: r.customerPhone, score: r.score, grade: r.grade, label: r.label, creditLimit: r.creditLimit })}
                               className="w-full h-10 bg-primary text-primary-foreground rounded-lg text-sm font-medium transition-colors hover:bg-primary/90"
                             >
                               Offer loan
@@ -661,7 +661,7 @@ function RetailersManagedTab({ wholesalerUid }: { wholesalerUid: string }) {
                             <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Actions</span>
                             {r.retailerUid ? (
                               <button
-                                onClick={() => setOfferTarget({ id: r.id, retailerUid: r.retailerUid!, retailerName: r.retailerName, retailerEmail: r.retailerEmail, score: r.score, grade: r.grade, label: r.label, creditLimit: r.creditLimit })}
+                                onClick={() => setOfferTarget({ id: r.id, retailerUid: r.retailerUid!, retailerName: r.retailerName, retailerEmail: r.retailerEmail, retailerPhone: r.customerPhone, score: r.score, grade: r.grade, label: r.label, creditLimit: r.creditLimit })}
                                 className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-primary text-primary-foreground text-xs font-medium transition-colors hover:bg-primary/90"
                               >
                                 Offer loan

@@ -7,6 +7,7 @@ export interface LoanOfferTarget {
   retailerUid: string;
   retailerName: string;
   retailerEmail: string;
+  retailerPhone?: string;
   score: number;
   grade: string;
   label: string;
@@ -179,6 +180,7 @@ export default function LoanOfferModal({ retailer, wholesaler, onClose }: Props)
         retailerUid: retailer.retailerUid,
         retailerName: retailer.retailerName,
         retailerEmail: retailer.retailerEmail,
+        retailerPhone: retailer.retailerPhone || null,
         reportId: retailer.id,
         creditLimit: retailer.creditLimit ?? null,
         principal: parsedPrincipal,
