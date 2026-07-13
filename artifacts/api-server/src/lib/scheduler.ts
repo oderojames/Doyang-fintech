@@ -1,5 +1,5 @@
 import { getAdminFirestore } from "./firebase-admin.js";
-import { chargeAuthorization } from "./paystack.js";
+import { chargeAuthorization, transferToMpesaWallet } from "./paystack.js";
 import { updateHpDueStatuses, processHpCharges } from "./hp-scheduler.js";
 
 // ── Retry configuration ────────────────────────────────────────────────────────
@@ -317,7 +317,31 @@ export async function processInstallment(
     const totalAmount = Number(repay.amount);
     const wholesalerShare = Math.round(totalAmount * 0.9 * 100) / 100;
     const platformShare = Math.round((totalAmount - wholesalerShare) * 100) / 100;
-    const settlementStatus = splitCode ? "settled" : "pending_subaccount";
+    let settlementStatus = splitCode ? "settled" : "pending_subaccount";
+    let mpesaTransferRef: string | null = null;
+
+    if (!splitCode) {
+      const wholesalerSnap = await db.collection("users").doc(offer.wholesalerUid).get();
+      const wholesalerData = wholesalerSnap.data();
+      const wallet = wholesalerData?.verifiedMpesaWallet as string | undefined;
+      if (wallet) {
+        const payout = await transferToMpesaWallet(
+          wallet,
+          (wholesalerData?.displayName as string | undefined) || (offer.wholesalerName as string | undefined) || "Wholesaler",
+          wholesalerShare,
+          `${String(offer.retailerName ?? "Retailer").slice(0, 30)} repayment #${repay.installmentNumber}`
+        );
+        if (payout.success) {
+          mpesaTransferRef = payout.reference ?? null;
+          settlementStatus = "settled_mpesa";
+          console.log(`[scheduler] ✓ Mobile wallet payout sent to wholesaler ${offer.wholesalerUid}: KES ${wholesalerShare} (ref: ${mpesaTransferRef})`);
+        } else {
+          console.warn(`[scheduler] Mobile wallet payout FAILED for wholesaler ${offer.wholesalerUid}: ${payout.error}`);
+        }
+      } else {
+        console.warn(`[scheduler] Wholesaler ${offer.wholesalerUid} has no subaccount AND no verifiedMpesaWallet — payout cannot be sent`);
+      }
+    }
 
     await repayRef.update({
       status: "paid",
@@ -329,7 +353,8 @@ export async function processInstallment(
       wholesalerShare,
       platformShare,
       settlementStatus,
-      settlementAt: splitCode ? now : null,
+      settlementAt: (splitCode || mpesaTransferRef) ? now : null,
+      mpesaTransferRef,
     });
 
     console.log(
@@ -347,7 +372,11 @@ export async function processInstallment(
         title: "Repayment received",
         body:
           `${offer.retailerName} paid installment #${repay.installmentNumber} of KES ${totalAmount.toLocaleString()}. ` +
-          `Your share: KES ${wholesalerShare.toLocaleString()}${splitCode ? " — settled to your account." : " — pending (no subaccount configured)."}`,
+          `Your share: KES ${wholesalerShare.toLocaleString()}${
+            settlementStatus === "settled" ? " — settled to your account."
+            : settlementStatus === "settled_mpesa" ? " — sent to your mobile wallet."
+            : " — pending settlement."
+          }`,
         offerId: offerRef.id,
         installmentNumber: repay.installmentNumber,
         wholesalerShare,

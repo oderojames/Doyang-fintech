@@ -168,3 +168,68 @@ export async function chargeAuthorization(
     };
   }
 }
+
+// ── Transfer to a wholesaler's/seller's mobile money wallet ──────────────────
+// Used when a payee has no Paystack subaccount (bank not configured) but does
+// have a verified M-Pesa/mobile wallet number on file.
+export async function transferToMpesaWallet(
+  phone: string,
+  recipientName: string,
+  amountKes: number,
+  reason: string
+): Promise<{ success: boolean; reference?: string; error?: string }> {
+  try {
+    const digits = phone.replace(/\D/g, "");
+    const normalised =
+      digits.startsWith("0") && digits.length === 10 ? "254" + digits.slice(1)
+      : digits.startsWith("254") && digits.length === 12 ? digits
+      : digits.length === 9 ? "254" + digits
+      : digits;
+
+    const recipientData = await paystackRequest<{
+      status: boolean;
+      message?: string;
+      data?: { recipient_code: string };
+    }>("POST", "/transferrecipient", {
+      type: "mobile_money",
+      name: recipientName,
+      account_number: normalised,
+      bank_code: "MPESA",
+      currency: "KES",
+    });
+
+    if (!recipientData.status || !recipientData.data?.recipient_code) {
+      return { success: false, error: recipientData.message ?? "Could not create mobile money recipient" };
+    }
+
+    const transferData = await paystackRequest<{
+      status: boolean;
+      message?: string;
+      data?: { reference: string; status?: string };
+    }>("POST", "/transfer", {
+      source: "balance",
+      amount: Math.round(amountKes * 100),
+      recipient: recipientData.data.recipient_code,
+      currency: "KES",
+      reason,
+    });
+
+    if (transferData.data?.status === "otp") {
+      return {
+        success: false,
+        error: "Transfer requires OTP confirmation — disable 'Confirm transfers before sending' in Paystack Settings > Preferences for automated payouts to work",
+      };
+    }
+
+    if (transferData.status && transferData.data?.reference) {
+      return { success: true, reference: transferData.data.reference };
+    }
+
+    return { success: false, error: transferData.message ?? "Mobile wallet transfer failed" };
+  } catch (e) {
+    return {
+      success: false,
+      error: e instanceof Error ? e.message : "Network error during mobile wallet transfer",
+    };
+  }
+}
