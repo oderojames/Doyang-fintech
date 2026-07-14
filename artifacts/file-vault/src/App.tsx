@@ -214,6 +214,7 @@ function RetailerPortal() {
     );
   }
 
+  if (user.role === 'buyer') { window.location.href = '/buyer'; return null; }
   return <Vault />;
 }
 
@@ -244,7 +245,7 @@ function BuyerPortal() {
     );
   }
 
-  if (user.role && user.role !== 'buyer') {
+  if (false && user.role && user.role !== 'buyer') {
     return (
       <WrongPortalScreen
         accountRole={user.role as 'retailer' | 'wholesaler'}

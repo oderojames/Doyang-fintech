@@ -1112,5 +1112,6 @@ export default function WholesalerPage() {
     );
   }
 
+  if (user.role === 'buyer') { window.location.href = '/buyer'; return null; }
   return <WholesalerDashboard />;
 }
