@@ -323,7 +323,9 @@ export async function processInstallment(
     if (!splitCode) {
       const wholesalerSnap = await db.collection("users").doc(offer.wholesalerUid).get();
       const wholesalerData = wholesalerSnap.data();
-      const wallet = wholesalerData?.verifiedMpesaWallet as string | undefined;
+      const wallet = wholesalerData?.settlementMethod === "mobile_wallet"
+        ? (wholesalerData?.settlementPhone as string | undefined)
+        : undefined;
       if (wallet) {
         const payout = await transferToMpesaWallet(
           wallet,
@@ -339,7 +341,7 @@ export async function processInstallment(
           console.warn(`[scheduler] Mobile wallet payout FAILED for wholesaler ${offer.wholesalerUid}: ${payout.error}`);
         }
       } else {
-        console.warn(`[scheduler] Wholesaler ${offer.wholesalerUid} has no subaccount AND no verifiedMpesaWallet — payout cannot be sent`);
+        console.warn(`[scheduler] Wholesaler ${offer.wholesalerUid} has no subaccount AND no mobile wallet configured — payout cannot be sent`);
       }
     }
 
