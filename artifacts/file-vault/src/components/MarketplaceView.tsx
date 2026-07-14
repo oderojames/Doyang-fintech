@@ -57,7 +57,7 @@ function GradeBadge({ grade }: { grade: string }) {
       className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold shrink-0"
       style={{ background: color + '20', border: `1px solid ${color}50`, color }}
     >
-      Grade {grade}
+      Trust Score {grade}
     </span>
   );
 }
