@@ -1,5 +1,5 @@
-import { Router } from "express";
-import { getAdminFirestore } from "../lib/firebase-admin.js";
+import { Router, type Request } from "express";
+import { getAdminFirestore, getAdminAuth } from "../lib/firebase-admin.js";
 
 const router = Router();
 
@@ -276,3 +276,86 @@ router.get("/paystack/auth-check", async (req, res) => {
 });
 
 export default router;
+
+async function verifyToken(req: Request): Promise<{ uid: string } | null> {
+  const token = req.headers["x-firebase-token"] as string | undefined;
+  if (!token) return null;
+  try {
+    const decoded = await getAdminAuth().verifyIdToken(token);
+    return { uid: decoded.uid };
+  } catch {
+    return null;
+  }
+}
+
+// KES amount -> retailer slots granted. Must match PAYMENT_TIERS in WholesalerPage.tsx.
+const QUOTA_TIERS: Record<number, number> = { 100: 10, 200: 20, 300: 30, 500: 50 };
+
+// POST /api/wholesaler/upgrade-quota — server-verified quota purchase.
+// Verifies the Paystack transaction directly (amount + status) before granting slots,
+// and records the reference as redeemed to prevent replay. Only the Admin SDK can write
+// slotQuota — Firestore rules block clients from writing it directly.
+router.post("/wholesaler/upgrade-quota", async (req, res) => {
+  try {
+    const auth = await verifyToken(req);
+    if (!auth) { res.status(401).json({ error: "Unauthorized" }); return; }
+
+    const db = getAdminFirestore();
+    const userRef = db.collection("users").doc(auth.uid);
+    const userSnap = await userRef.get();
+    const role = (userSnap.data()?.role as string) ?? "retailer";
+    if (role !== "wholesaler") {
+      res.status(403).json({ error: "Only wholesalers can purchase retailer slots" });
+      return;
+    }
+
+    const { reference } = req.body as { reference?: string };
+    if (!reference) { res.status(400).json({ error: "reference is required" }); return; }
+
+    const usedRef = db.collection("quota_purchases").doc(reference);
+    const usedSnap = await usedRef.get();
+    if (usedSnap.exists) {
+      res.status(409).json({ error: "This payment has already been redeemed" });
+      return;
+    }
+
+    const data = await ps<{
+      status: boolean;
+      data: { status: string; amount: number; currency: string };
+    }>("GET", `/transaction/verify/${encodeURIComponent(reference)}`);
+
+    if (!data.status || data.data.status !== "success") {
+      res.status(402).json({ error: "Transaction not successful" });
+      return;
+    }
+
+    const amountKes = data.data.amount / 100;
+    const slots = QUOTA_TIERS[amountKes];
+    if (!slots) {
+      res.status(422).json({ error: `Unrecognised payment amount: KES ${amountKes}` });
+      return;
+    }
+
+    const currentQuota = (userSnap.data()?.slotQuota as number) ?? 3;
+    const newQuota = currentQuota + slots;
+    const expiresAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
+
+    await userRef.update({
+      slotQuota: newQuota,
+      slotPurchasedAt: new Date(),
+      slotExpiresAt: expiresAt,
+    });
+
+    await usedRef.set({
+      wholesalerUid: auth.uid,
+      amountKes,
+      slots,
+      redeemedAt: new Date(),
+    });
+
+    res.json({ success: true, newQuota, expiresAt: expiresAt.toISOString() });
+  } catch (err: unknown) {
+    const msg = err instanceof Error ? err.message : String(err);
+    res.status(500).json({ error: msg });
+  }
+});

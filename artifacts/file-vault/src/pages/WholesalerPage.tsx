@@ -13,7 +13,7 @@ import WholesalerLoansTab from '@/components/WholesalerLoansTab';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { collection, getDocs, query, where, doc, getDoc, setDoc } from 'firebase/firestore';
-import { db } from '@/lib/firebase';
+import { db, auth } from '@/lib/firebase';
 
 function EmailVerificationBanner() {
   const { user, signOut, sendVerificationEmail, reloadUser } = useAuth();
@@ -277,17 +277,23 @@ function RetailersManagedTab({ wholesalerUid }: { wholesalerUid: string }) {
           clearInterval(id);
           const tier = pendingTierRef.current;
           if (tier) {
-            setQuota(prev => {
-              const newQ = prev + tier.slots;
-              const expiresAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
-              setDoc(doc(db, 'users', wholesalerUid), {
-                slotQuota: newQ,
-                slotPurchasedAt: new Date(),
-                slotExpiresAt: expiresAt,
-              }, { merge: true }).catch((e) => console.error('[slot] Failed to save quota:', e));
-              setQuotaExpiry(expiresAt);
-              return newQ;
-            });
+            try {
+              const token = await auth.currentUser?.getIdToken();
+              const upgradeRes = await fetch('/api/wholesaler/upgrade-quota', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'X-Firebase-Token': token ?? '' },
+                body: JSON.stringify({ reference: paymentTxRef }),
+              });
+              const upgradeData = await upgradeRes.json();
+              if (upgradeData.success) {
+                setQuota(upgradeData.newQuota);
+                setQuotaExpiry(new Date(upgradeData.expiresAt));
+              } else {
+                console.error('[slot] Quota upgrade rejected by server:', upgradeData.error);
+              }
+            } catch (e) {
+              console.error('[slot] Quota upgrade request failed:', e);
+            }
           }
           setPaymentStep('success');
         }
