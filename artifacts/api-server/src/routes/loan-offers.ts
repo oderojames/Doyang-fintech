@@ -26,6 +26,7 @@ router.post("/loan-offers", async (req, res) => {
     const uid = await verifyToken(req);
     if (!uid) { res.status(401).json({ error: "Unauthorized" }); return; }
 
+    const roleSnap = await getAdminFirestore().collection("users").doc(uid).get(); if ((roleSnap.data()?.role ?? "retailer") !== "wholesaler") { res.status(403).json({ error: "Only wholesalers can create loan offers" }); return; }
     const body = req.body as Record<string, unknown>;
     if (body.wholesalerUid !== uid) {
       res.status(403).json({ error: "Forbidden: wholesalerUid must match authenticated user" }); return;
@@ -86,6 +87,7 @@ router.patch("/loan-offers/:offerId", async (req, res) => {
     const uid = await verifyToken(req);
     if (!uid) { res.status(401).json({ error: "Unauthorized" }); return; }
 
+    const roleSnap = await getAdminFirestore().collection("users").doc(uid).get(); if ((roleSnap.data()?.role ?? "retailer") !== "retailer") { res.status(403).json({ error: "Only retailers can respond to loan offers" }); return; }
     const { offerId } = req.params;
     const body = req.body as { status: string; confirmations?: Record<string, boolean> };
     const { status, confirmations } = body;
