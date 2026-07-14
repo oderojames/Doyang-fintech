@@ -1119,13 +1119,14 @@ export default function MarketplaceView() {
   const [showSettings, setShowSettings] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('all');
+  const hasLoadedOnce = useRef(false);
 
   useEffect(() => {
     let cancelled = false;
 
     async function fetchProducts() {
       if (cancelled) return;
-      setLoading(true);
+      if (!hasLoadedOnce.current) setLoading(true);
       setFetchError(null);
       try {
         const token = await auth.currentUser?.getIdToken().catch(() => null) ?? null;
@@ -1141,12 +1142,14 @@ export default function MarketplaceView() {
               .slice(0, 50)
           );
           setLoading(false);
+          hasLoadedOnce.current = true;
         }
       } catch (err) {
         if (!cancelled) {
           console.error('[marketplace] fetch error:', err);
           setFetchError('Failed to load products. Please check your connection.');
           setLoading(false);
+          hasLoadedOnce.current = true;
         }
       }
     }
