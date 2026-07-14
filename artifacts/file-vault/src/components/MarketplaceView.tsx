@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import {
   ShoppingBag, AlertCircle, RefreshCw, Phone, CheckCircle2,
-  X, Star, Package, LogOut, CreditCard, Settings, Calendar,
+  X, Star, Package, LogOut, CreditCard, Settings, Calendar, Search,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -1117,6 +1117,8 @@ export default function MarketplaceView() {
   const [buying, setBuying] = useState<MarketplaceProduct | null>(null);
   const [hpBuying, setHpBuying] = useState<MarketplaceProduct | null>(null);
   const [showSettings, setShowSettings] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [categoryFilter, setCategoryFilter] = useState('all');
 
   useEffect(() => {
     let cancelled = false;
@@ -1170,6 +1172,15 @@ export default function MarketplaceView() {
     refreshProducts(); // re-poll so updated stock is visible immediately
   };
 
+  const categories = Array.from(new Set(products.map(p => p.businessType).filter(Boolean))).sort();
+
+  const filteredProducts = products.filter(p => {
+    const matchesSearch = searchQuery.trim() === ''
+      || p.title.toLowerCase().includes(searchQuery.trim().toLowerCase());
+    const matchesCategory = categoryFilter === 'all' || p.businessType === categoryFilter;
+    return matchesSearch && matchesCategory;
+  });
+
   return (
     <div className="min-h-screen w-full bg-background flex flex-col">
       <div className="px-4 pt-6 pb-4 flex items-center justify-between">
@@ -1204,6 +1215,39 @@ export default function MarketplaceView() {
       <BuyerConnectCardBanner />
 
       <div className="flex-1 px-4 pb-8">
+        {!loading && !fetchError && products.length > 0 && (
+          <div className="mb-4 space-y-2.5">
+            <div className="relative">
+              <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
+              <Input
+                type="text"
+                placeholder="Search products..."
+                value={searchQuery}
+                onChange={e => setSearchQuery(e.target.value)}
+                className="pl-9 bg-card"
+              />
+            </div>
+            {categories.length > 1 && (
+              <div className="flex gap-1.5 overflow-x-auto pb-1 -mx-1 px-1">
+                <button
+                  onClick={() => setCategoryFilter('all')}
+                  className={`shrink-0 px-3 py-1.5 rounded-full text-[11px] font-semibold border transition-colors ${categoryFilter === 'all' ? 'bg-primary text-primary-foreground border-primary' : 'bg-card text-muted-foreground border-border hover:border-primary/40'}`}
+                >
+                  All
+                </button>
+                {categories.map(cat => (
+                  <button
+                    key={cat}
+                    onClick={() => setCategoryFilter(cat)}
+                    className={`shrink-0 px-3 py-1.5 rounded-full text-[11px] font-semibold border transition-colors whitespace-nowrap ${categoryFilter === cat ? 'bg-primary text-primary-foreground border-primary' : 'bg-card text-muted-foreground border-border hover:border-primary/40'}`}
+                  >
+                    {cat}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
         {loading ? (
           <div className="flex flex-col items-center justify-center py-20 gap-3">
             <div className="w-10 h-10 border-4 border-green-500 border-t-transparent rounded-full animate-spin" />
@@ -1231,9 +1275,27 @@ export default function MarketplaceView() {
               <RefreshCw size={13} /> Refresh
             </Button>
           </div>
+        ) : filteredProducts.length === 0 ? (
+          <div className="flex flex-col items-center justify-center py-20 gap-3 text-center">
+            <div className="w-16 h-16 rounded-2xl bg-muted flex items-center justify-center">
+              <Search size={28} className="text-muted-foreground/40" />
+            </div>
+            <p className="text-sm font-semibold text-foreground">No matching products</p>
+            <p className="text-xs text-muted-foreground max-w-xs">
+              Try a different search term or category.
+            </p>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => { setSearchQuery(''); setCategoryFilter('all'); }}
+              className="gap-2 mt-1"
+            >
+              Clear filters
+            </Button>
+          </div>
         ) : (
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
-            {products.map(p => (
+            {filteredProducts.map(p => (
               <ProductCard key={p.id} product={p} onClick={() => setSelected(p)} />
             ))}
           </div>
