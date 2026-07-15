@@ -171,7 +171,7 @@ function LoanCard({ offer }: LoanCardProps) {
     </span>
   ) : isCompleted ? (
     <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-primary/15 border border-primary/30 text-primary">
-      <Star size={9} /> Completed
+      Completed
     </span>
   ) : isDefaulted ? (
     <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-red-500/15 border border-red-500/30 text-red-400">
@@ -256,7 +256,6 @@ function LoanCard({ offer }: LoanCardProps) {
 
         {isActive && nextDue && (nextDue.retryCount ?? 0) === 0 && (
           <div className="flex items-center gap-2 rounded-lg bg-amber-500/5 border border-amber-500/20 px-3 py-2">
-            <Clock size={11} className="text-amber-400 shrink-0" />
             <p className="text-xs text-foreground">
               Next payment: <span className="font-semibold">{kes(nextDue.amount)}</span>
               {' '}— <span className="font-semibold">{nextDue.status === 'due' ? 'Due now' : `due ${fmt(nextDue.dueDate)}`}</span>
@@ -266,7 +265,6 @@ function LoanCard({ offer }: LoanCardProps) {
 
         {isCompleted && (
           <div className="flex items-center gap-2 rounded-lg bg-primary/5 border border-primary/20 px-3 py-2">
-            <CheckCircle2 size={11} className="text-primary shrink-0" />
             <p className="text-xs text-foreground font-medium">Loan fully repaid · {kes(offer.totalRepayable)} collected</p>
           </div>
         )}
@@ -355,7 +353,7 @@ function LoanCard({ offer }: LoanCardProps) {
                             {r.status === 'paid' ? (
                               r.settlementStatus === 'settled' ? (
                                 <span className="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded-full text-[9px] font-bold bg-green-500/15 border border-green-500/30 text-green-400 whitespace-nowrap">
-                                  <ArrowDownToLine size={7} /> Settled
+                                  Settled
                                 </span>
                               ) : r.settlementStatus === 'pending_subaccount' ? (
                                 <span className="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded-full text-[9px] font-bold bg-amber-500/15 border border-amber-500/30 text-amber-400 whitespace-nowrap">

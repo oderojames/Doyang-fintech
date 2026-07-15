@@ -315,7 +315,6 @@ export default function NotificationCenter({
 
                       {/* Sub-header */}
                       <div className="flex items-center gap-2 px-4 py-2.5 bg-muted/20 border-b border-border/60">
-                        <Banknote size={12} className="text-amber-400" />
                         <span className="text-xs font-semibold text-foreground">Credit Offers</span>
                         {pending.length > 0 && (
                           <span className="px-1.5 py-0.5 rounded-full bg-amber-500/15 text-amber-400 text-[10px] font-bold">
@@ -346,7 +345,7 @@ export default function NotificationCenter({
                         {active.length > 0 && (
                           <div className="space-y-3">
                             <p className="text-[10px] font-semibold text-green-400 flex items-center gap-1">
-                              <Zap size={9} /> Active Loans ({active.length})
+                              Active Loans ({active.length})
                             </p>
                             {active.map(o => (
                               <OfferCard key={o.id} offer={o} cardInfo={cardInfo} onUpdate={handleOfferUpdate} />
