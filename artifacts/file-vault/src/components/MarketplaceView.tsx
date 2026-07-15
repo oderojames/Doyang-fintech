@@ -1188,9 +1188,6 @@ export default function MarketplaceView() {
     <div className="min-h-screen w-full bg-background flex flex-col">
       <div className="px-4 pt-6 pb-4 flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-xl bg-green-500/20 border border-green-500/30 flex items-center justify-center">
-            <ShoppingBag size={18} className="text-green-400" />
-          </div>
           <div>
             <h1 className="text-lg font-bold text-foreground">Marketplace</h1>
             <p className="text-[11px] text-muted-foreground">

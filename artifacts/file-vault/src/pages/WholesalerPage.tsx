@@ -394,7 +394,7 @@ function RetailersManagedTab({ wholesalerUid }: { wholesalerUid: string }) {
           onClick={openPayment}
           className="flex items-center gap-1.5 text-xs font-semibold text-amber-400 hover:text-amber-300 transition-colors bg-amber-500/10 border border-amber-500/25 rounded-lg px-3 py-1.5 shrink-0"
         >
-          <CreditCard size={12} /> Upgrade Slots
+          Upgrade Slots
         </button>
         <Button variant="outline" size="sm" onClick={fetchReports} className="gap-2 shrink-0">
           <RefreshCw size={13} />
@@ -933,9 +933,6 @@ function WholesalerDashboard() {
       {/* Header */}
       <header className="relative z-10 border-b border-border bg-card/60 px-4 sm:px-6 py-3 flex items-center justify-between shrink-0">
         <div className="flex items-center gap-2 sm:gap-3">
-          <div className="w-8 h-8 rounded-lg bg-amber-500/20 border border-amber-500/30 flex items-center justify-center">
-            <Building2 size={16} className="text-amber-400" />
-          </div>
           <span className="text-sm font-bold text-foreground">Doyang</span>
           <span className="text-xs text-amber-400 font-semibold hidden xs:inline">· Wholesaler</span>
         </div>
@@ -981,7 +978,6 @@ function WholesalerDashboard() {
                 : 'border-transparent text-muted-foreground hover:text-foreground'
             }`}
           >
-            <Banknote size={14} />
             Active Loans
           </button>
         </div>
