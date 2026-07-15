@@ -171,10 +171,10 @@ export default function Chatbot({ screenName, screenContext, features }: Chatbot
         onClick={() => setOpen(o => !o)}
         aria-label={open ? 'Close assistant' : 'Open assistant'}
         aria-expanded={open}
-        className="relative inline-flex items-center justify-center w-12 h-12 rounded-full bg-gradient-to-br from-primary to-primary/80 text-white shadow-lg shadow-primary/40 hover:scale-105 active:scale-95 transition-transform"
+        className="relative inline-flex items-center justify-center w-10 h-10 rounded-full bg-gradient-to-br from-primary to-primary/80 text-white shadow-lg shadow-primary/40 hover:scale-105 active:scale-95 transition-transform"
       >
         {!open && <span className="absolute inset-0 rounded-full bg-primary/40 animate-ping" />}
-        {open ? <X size={20} /> : <Bot size={20} className="relative" />}
+        {open ? <X size={16} /> : <Bot size={16} className="relative" />}
       </button>
     </div>
   );

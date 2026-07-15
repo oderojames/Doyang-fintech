@@ -655,7 +655,7 @@ function RetailersManagedTab({ wholesalerUid }: { wholesalerUid: string }) {
 
                           {/* Credit Limit */}
                           <div className="grid grid-cols-[160px_1fr] gap-4 px-5 py-3 items-center">
-                            <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Credit Limit</span>
+                            <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Suggested Credit Limit</span>
                             <div className="flex items-center gap-2">
                               <CreditCard size={15} className="text-muted-foreground shrink-0" />
                               <span className={`text-sm font-medium ${r.creditLimit != null && r.creditLimit > 0 ? 'text-foreground' : 'text-muted-foreground/40'}`}>{limitText}</span>

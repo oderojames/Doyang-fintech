@@ -50,12 +50,12 @@ export default function ContactWidget() {
         onClick={() => setOpen((o) => !o)}
         aria-label={open ? "Close contact support" : "Contact support"}
         aria-expanded={open}
-        className="relative inline-flex items-center justify-center w-14 h-14 rounded-full bg-gradient-to-br from-primary to-primary/80 text-white shadow-lg shadow-primary/40 hover:scale-105 active:scale-95 transition-transform"
+        className="relative inline-flex items-center justify-center w-11 h-11 rounded-full bg-gradient-to-br from-primary to-primary/80 text-white shadow-lg shadow-primary/40 hover:scale-105 active:scale-95 transition-transform"
       >
         {!open && (
           <span className="absolute inset-0 rounded-full bg-primary/40 animate-ping" />
         )}
-        {open ? <X size={24} /> : <Headset size={24} className="relative" />}
+        {open ? <X size={18} /> : <Headset size={18} className="relative" />}
       </button>
     </div>
   );
