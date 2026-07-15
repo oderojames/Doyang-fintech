@@ -37,12 +37,6 @@ export default function HomePage() {
             className="group w-full bg-card border border-border hover:border-primary/50 hover:bg-primary/5 rounded-2xl p-6 text-left transition-all duration-200 shadow-sm hover:shadow-md hover:shadow-primary/10 active:scale-[0.99]"
           >
             <div className="flex items-center gap-4">
-              <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-primary/15 border border-primary/25 flex items-center justify-center group-hover:bg-primary/25 transition-colors">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="hsl(var(--primary))" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
-                  <polyline points="9 22 9 12 15 12 15 22"/>
-                </svg>
-              </div>
               <div className="flex-1">
                 <h2 className="text-base font-bold text-foreground">Retailer Portal</h2>
                 <p className="text-sm text-muted-foreground mt-0.5">Assess credit to grow</p>
@@ -59,12 +53,6 @@ export default function HomePage() {
             className="group w-full bg-card border border-border hover:border-secondary/50 hover:bg-secondary/5 rounded-2xl p-6 text-left transition-all duration-200 shadow-sm hover:shadow-md active:scale-[0.99]"
           >
             <div className="flex items-center gap-4">
-              <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-secondary/15 border border-secondary/25 flex items-center justify-center group-hover:bg-secondary/25 transition-colors">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="hsl(var(--secondary-foreground))" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <rect x="2" y="7" width="20" height="14" rx="2" ry="2"/>
-                  <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
-                </svg>
-              </div>
               <div className="flex-1">
                 <h2 className="text-base font-bold text-foreground">Wholesaler Portal</h2>
                 <p className="text-sm text-muted-foreground mt-0.5">Manage bulk credit assessments & reports</p>
@@ -81,13 +69,6 @@ export default function HomePage() {
             className="group w-full bg-card border border-border hover:border-green-500/50 hover:bg-green-500/5 rounded-2xl p-6 text-left transition-all duration-200 shadow-sm hover:shadow-md hover:shadow-green-500/10 active:scale-[0.99]"
           >
             <div className="flex items-center gap-4">
-              <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-green-500/15 border border-green-500/25 flex items-center justify-center group-hover:bg-green-500/25 transition-colors">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="rgb(56 189 248)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
-                  <line x1="3" y1="6" x2="21" y2="6"/>
-                  <path d="M16 10a4 4 0 0 1-8 0"/>
-                </svg>
-              </div>
               <div className="flex-1">
                 <h2 className="text-base font-bold text-foreground">Buyer Portal</h2>
                 <p className="text-sm text-muted-foreground mt-0.5">Browse verified sellers & credit reports</p>
