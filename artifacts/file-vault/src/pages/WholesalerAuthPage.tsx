@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useLocation } from 'wouter';
-import { Building2, Mail, Lock, User, Eye, EyeOff, AlertCircle, Tag } from 'lucide-react';
+import { ShieldCheck, Mail, Lock, User, Eye, EyeOff, AlertCircle, Tag } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useAuth } from '@/contexts/AuthContext';
@@ -118,13 +118,13 @@ export default function WholesalerAuthPage() {
     <div className="min-h-screen w-full bg-background flex items-center justify-center p-4">
 
       <div className="absolute inset-0 bg-[linear-gradient(hsl(220_15%_10%/0.8)_1px,transparent_1px),linear-gradient(90deg,hsl(220_15%_10%/0.8)_1px,transparent_1px)] bg-[size:40px_40px] opacity-40 pointer-events-none" />
-      <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-amber-500/5 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-primary/5 rounded-full blur-3xl pointer-events-none" />
 
       <div className="relative w-full max-w-md">
 
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-amber-500/20 border border-amber-500/30 mb-4">
-            <Building2 size={28} className="text-amber-400" />
+          <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-primary/20 border border-primary/30 mb-4">
+            <ShieldCheck size={28} className="text-primary" />
           </div>
           <h1 className="text-2xl font-bold tracking-tight text-foreground">Doyang</h1>
           <p className="text-sm text-muted-foreground mt-1">Wholesaler Portal · M-Pesa Creditworthiness</p>
@@ -133,8 +133,8 @@ export default function WholesalerAuthPage() {
         <div className="bg-card border border-border rounded-2xl p-8 shadow-2xl">
 
           <div className="flex justify-center mb-6">
-            <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/25 text-xs font-semibold text-amber-400">
-              <span className="w-1.5 h-1.5 rounded-full bg-amber-400 inline-block" />
+            <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/25 text-xs font-semibold text-primary">
+              <span className="w-1.5 h-1.5 rounded-full bg-primary inline-block" />
               Wholesaler Portal
             </span>
           </div>
@@ -193,7 +193,7 @@ export default function WholesalerAuthPage() {
                   type="button"
                   disabled={resetStatus === 'sending'}
                   onClick={handleForgotPassword}
-                  className="text-xs text-amber-400 hover:underline disabled:opacity-50 transition-colors"
+                  className="text-xs text-primary hover:underline disabled:opacity-50 transition-colors"
                 >
                   {resetStatus === 'sending' ? 'Sending…' : 'Forgot password?'}
                 </button>
@@ -223,12 +223,12 @@ export default function WholesalerAuthPage() {
 
             <Button
               type="submit"
-              className="w-full font-semibold bg-amber-500 hover:bg-amber-400 text-black border-0"
+              className="w-full font-semibold bg-primary hover:bg-primary/90 text-primary-foreground border-0"
               disabled={loading}
             >
               {loading ? (
                 <span className="flex items-center gap-2">
-                  <span className="w-4 h-4 border-2 border-black/40 border-t-transparent rounded-full animate-spin" />
+                  <span className="w-4 h-4 border-2 border-primary-foreground/40 border-t-transparent rounded-full animate-spin" />
                   {tab === 'signup' ? 'Creating account…' : 'Signing in…'}
                 </span>
               ) : tab === 'signup' ? 'Create Wholesaler Account' : 'Sign In'}
