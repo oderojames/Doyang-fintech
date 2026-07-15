@@ -88,8 +88,8 @@ export function OfferCard({ offer, cardInfo, onUpdate }: OfferCardProps) {
       <Clock size={9} /> Awaiting response
     </span>
   ) : isActive ? (
-    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-green-500/15 border border-green-500/30 text-green-400">
-      <Zap size={9} /> Active
+    <span className="text-[10px] font-bold text-green-400">
+      Active
     </span>
   ) : (
     <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-muted border border-border text-muted-foreground">
@@ -211,12 +211,6 @@ export function OfferCard({ offer, cardInfo, onUpdate }: OfferCardProps) {
             </div>
           )}
 
-          {isActive && (
-            <div className="flex items-center gap-2 text-green-400 text-xs bg-green-500/10 border border-green-500/20 rounded-lg px-3 py-2">
-              <Zap size={12} />
-              Loan active · Installments generated · Repayments scheduled.
-            </div>
-          )}
 
         </div>
       </div>

@@ -166,8 +166,8 @@ function LoanCard({ offer }: LoanCardProps) {
     : 'border-border';
 
   const statusBadge = isActive ? (
-    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-green-500/15 border border-green-500/30 text-green-400">
-      <Zap size={9} /> Active
+    <span className="text-[10px] font-bold text-green-400">
+      Active
     </span>
   ) : isCompleted ? (
     <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-primary/15 border border-primary/30 text-primary">
