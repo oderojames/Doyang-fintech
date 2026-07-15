@@ -100,6 +100,7 @@ export default function HomePage() {
         </div>
 
         <p className="text-xs text-muted-foreground">Doyang © {new Date().getFullYear()} · All rights reserved</p>
+        <p className="text-xs text-muted-foreground mt-1"><a href="/privacy" className="hover:text-foreground hover:underline">Privacy Policy</a> · <a href="/terms" className="hover:text-foreground hover:underline">Terms of Use</a></p>
       </div>
     </div>
   );
