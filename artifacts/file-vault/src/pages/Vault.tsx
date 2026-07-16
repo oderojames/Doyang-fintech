@@ -781,7 +781,7 @@ export default function Vault() {
             <ShieldCheck size={17} />
           </div>
           <div className="flex-1 min-w-0">
-            <h1 className="font-bold tracking-widest text-xs text-foreground">CREDIT VAULT</h1>
+            <h1 className="font-bold tracking-widest text-xs text-foreground">Doyang</h1>
             <p className="text-[10px] text-muted-foreground">M-Pesa Creditworthiness</p>
           </div>
           {/* Close button — mobile only */}
@@ -821,9 +821,9 @@ export default function Vault() {
             className="text-muted-foreground hover:text-destructive transition-colors shrink-0">
             <Trash2 size={13} />
           </button>
-          <button onClick={signOut} title="Sign out"
-            className="text-muted-foreground hover:text-destructive transition-colors shrink-0">
-            <LogOut size={13} />
+          <button onClick={signOut}
+            className="text-muted-foreground hover:text-destructive transition-colors shrink-0 text-xs font-medium">
+            Sign out
           </button>
         </div>
       </div>
@@ -985,7 +985,7 @@ export default function Vault() {
           </button>
           <div className="flex items-center gap-2">
             <ShieldCheck size={15} className="text-primary" />
-            <span className="font-bold text-sm tracking-wide">CREDIT VAULT</span>
+            <span className="font-bold text-sm tracking-wide">Doyang</span>
           </div>
           <div className="flex items-center gap-2">
             <button

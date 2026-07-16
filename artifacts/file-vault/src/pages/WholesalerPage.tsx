@@ -955,7 +955,7 @@ function WholesalerDashboard() {
             <Trash2 size={13} />
           </Button>
           <Button variant="ghost" size="sm" onClick={handleSignOut} className="gap-1.5 text-muted-foreground hover:text-foreground text-xs px-2 sm:px-3">
-            <LogOut size={13} /> <span className="hidden sm:inline">Sign out</span>
+            <span className="hidden sm:inline">Sign out</span>
           </Button>
         </div>
       </header>

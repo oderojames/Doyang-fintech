@@ -1206,7 +1206,6 @@ export default function MarketplaceView() {
             onClick={async () => { await signOut(); navigate('/'); }}
             className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors"
           >
-            <LogOut size={13} />
             Sign out
           </button>
         </div>
