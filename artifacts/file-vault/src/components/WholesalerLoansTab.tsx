@@ -255,12 +255,10 @@ function LoanCard({ offer }: LoanCardProps) {
         )}
 
         {isActive && nextDue && (nextDue.retryCount ?? 0) === 0 && (
-          <div className="flex items-center gap-2 rounded-lg bg-amber-500/5 border border-amber-500/20 px-3 py-2">
-            <p className="text-xs text-foreground">
-              Next payment: <span className="font-semibold">{kes(nextDue.amount)}</span>
-              {' '}— <span className="font-semibold">{nextDue.status === 'due' ? 'Due now' : `due ${fmt(nextDue.dueDate)}`}</span>
-            </p>
-          </div>
+          <p className="text-xs text-foreground">
+            Next payment: <span className="font-semibold">{kes(nextDue.amount)}</span>
+            {' '}— <span className="font-semibold">{nextDue.status === 'due' ? 'Due now' : `due ${fmt(nextDue.dueDate)}`}</span>
+          </p>
         )}
 
         {isCompleted && (

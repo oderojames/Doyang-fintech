@@ -807,12 +807,10 @@ export default function Vault() {
               title="Sell"
               className="h-9 px-3 rounded-full bg-primary text-primary-foreground font-semibold text-sm border border-primary/40 shadow-sm hover:bg-primary/90 transition-colors flex items-center gap-1.5"
             >
-              <Store size={15} />
               <span>Sell</span>
             </button>
             <a href="/buyer" className="inline-flex items-center gap-1.5 h-9 px-3 rounded-full bg-blue-500 hover:bg-blue-600 text-white font-semibold text-sm transition-colors">
-              <ShoppingBag size={15} />
-              <span>Marketplace</span>
+              <span>Buy</span>
             </a>
             <NotificationCenter
               onContinueToSellerMode={() => setShowSellerView(true)}
@@ -995,12 +993,10 @@ export default function Vault() {
               title="Sell"
               className="h-9 px-3 rounded-full bg-primary text-primary-foreground font-semibold text-sm border border-primary/40 shadow-sm hover:bg-primary/90 transition-colors flex items-center gap-1.5"
             >
-              <Store size={15} />
               <span>Sell</span>
             </button>
             <a href="/buyer" className="inline-flex items-center gap-1.5 h-9 px-3 rounded-full bg-blue-500 hover:bg-blue-600 text-white font-semibold text-sm transition-colors">
-              <ShoppingBag size={15} />
-              <span>Marketplace</span>
+              <span>Buy</span>
             </a>
             <NotificationCenter
               onContinueToSellerMode={() => setShowSellerView(true)}

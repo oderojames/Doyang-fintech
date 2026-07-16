@@ -142,12 +142,10 @@ export function OfferCard({ offer, cardInfo, onUpdate }: OfferCardProps) {
 
           {/* Active loan: next payment callout */}
           {isActive && offer.schedule.length > 0 && (
-            <div className="flex items-center gap-2 rounded-lg bg-green-500/5 border border-green-500/20 px-3 py-2">
-              <p className="text-xs text-foreground">
-                Next payment: <span className="font-semibold">{kes(offer.schedule[0].payment)}</span>
-                {' '}due <span className="font-semibold">{fmt(offer.schedule[0].dueDate)}</span>
-              </p>
-            </div>
+            <p className="text-xs text-foreground">
+              Next payment: <span className="font-semibold">{kes(offer.schedule[0].payment)}</span>
+              {' '}due <span className="font-semibold">{fmt(offer.schedule[0].dueDate)}</span>
+            </p>
           )}
 
           {/* Schedule toggle */}
