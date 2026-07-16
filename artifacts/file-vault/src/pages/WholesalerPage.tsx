@@ -102,6 +102,7 @@ interface ReportSummary {
   grade: string;
   label: string;
   creditLimit?: number | null;
+  sellerVerified?: boolean;
   periodStart?: string | null;
   periodEnd?: string | null;
   visibility?: 'public' | 'private' | 'sameBusiness';
@@ -243,7 +244,9 @@ function RetailersManagedTab({ wholesalerUid }: { wholesalerUid: string }) {
         }
       }
       combined.sort((a, b) => (a.dateAdded < b.dateAdded ? 1 : a.dateAdded > b.dateAdded ? -1 : 0));
-      setReports(combined);
+      const thirtyDaysAgo = Date.now() - 30 * 24 * 60 * 60 * 1000;
+      const fresh = combined.filter(r => new Date(r.dateAdded).getTime() >= thirtyDaysAgo);
+      setReports(fresh);
     } catch (e: any) {
       setError(e.message || 'Failed to load reports');
     } finally {
@@ -515,6 +518,7 @@ function RetailersManagedTab({ wholesalerUid }: { wholesalerUid: string }) {
                               {r.score}
                             </div>
                           </div>
+                          {r.sellerVerified && (<div className="flex items-center gap-1.5 mb-2.5 text-[12px] font-medium text-green-400"><CheckCircle2 size={13} className="shrink-0" />Verified Seller</div>)}
 
                           {/* Business type + grade */}
                           <div className="flex items-center gap-2 mb-3">

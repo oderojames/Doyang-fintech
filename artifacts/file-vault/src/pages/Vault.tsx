@@ -252,6 +252,7 @@ async function fsSaveAnalysis(
     grade: analysis.result.trustScore.grade,
     label: analysis.result.trustScore.label,
     creditLimit: analysis.result.trustScore.creditLimit ?? 0,
+    sellerVerified: analysis.result.sellerVerified ?? false,
     periodStart: analysis.result.summary?.periodStart ?? null,
     periodEnd: analysis.result.summary?.periodEnd ?? null,
     visibility,
