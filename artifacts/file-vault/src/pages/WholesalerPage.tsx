@@ -3,7 +3,7 @@ import { useLocation } from 'wouter';
 import { useAuth } from '@/contexts/AuthContext';
 import WholesalerAuthPage from '@/pages/WholesalerAuthPage';
 import CompleteProfileScreen from '@/components/CompleteProfileScreen';
-import { Building2, LogOut, Users, RefreshCw, AlertCircle, Search, Copy, Check, Trash2, Lock, Calendar, Mail, CheckCircle2, Smartphone, CreditCard, ChevronRight, X, Filter, Briefcase, Banknote, Phone, Settings } from 'lucide-react';
+import { Building2, LogOut, Users, RefreshCw, AlertCircle, Search, Copy, Check, Trash2, Lock, Calendar, Mail, CheckCircle2, Smartphone, CreditCard, ChevronRight, X, Filter, Briefcase, Banknote, Phone, Settings, ShoppingBag } from 'lucide-react';
 import NotificationCenter from '@/components/NotificationCenter';
 import WholesalerSettlementOnboarding from '@/components/WholesalerSettlementOnboarding';
 import WholesalerSettlementBanner from '@/components/WholesalerSettlementBanner';
@@ -940,6 +940,9 @@ function WholesalerDashboard() {
           <span className="text-xs text-muted-foreground hidden sm:block truncate max-w-[140px]">
             {user?.displayName || user?.email?.split('@')[0]}
           </span>
+          <a href="/buyer" className="inline-flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1.5 rounded-lg bg-blue-500 hover:bg-blue-600 text-white transition-colors">
+            <ShoppingBag size={13} /> <span className="hidden sm:inline">Marketplace</span>
+          </a>
           <NotificationCenter />
           <Button variant="ghost" size="sm" onClick={() => setShowSettlementSettings(true)} className="gap-1.5 text-muted-foreground hover:text-amber-400 text-xs px-2" title="Settlement account settings">
             <Settings size={13} />

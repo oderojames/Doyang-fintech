@@ -809,6 +809,10 @@ export default function Vault() {
               <Store size={15} />
               <span>Sell</span>
             </button>
+            <a href="/buyer" className="inline-flex items-center gap-1.5 h-9 px-3 rounded-full bg-blue-500 hover:bg-blue-600 text-white font-semibold text-sm transition-colors">
+              <ShoppingBag size={15} />
+              <span>Marketplace</span>
+            </a>
             <NotificationCenter
               onContinueToSellerMode={() => setShowSellerView(true)}
               onSellerUpload={() => { pendingSellerRef.current = true; openPicker(); }}
@@ -993,6 +997,10 @@ export default function Vault() {
               <Store size={15} />
               <span>Sell</span>
             </button>
+            <a href="/buyer" className="inline-flex items-center gap-1.5 h-9 px-3 rounded-full bg-blue-500 hover:bg-blue-600 text-white font-semibold text-sm transition-colors">
+              <ShoppingBag size={15} />
+              <span>Marketplace</span>
+            </a>
             <NotificationCenter
               onContinueToSellerMode={() => setShowSellerView(true)}
               onSellerUpload={() => { pendingSellerRef.current = true; openPicker(); }}
