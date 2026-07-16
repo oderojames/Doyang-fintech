@@ -305,7 +305,7 @@ function LoanCard({ offer }: LoanCardProps) {
                 <Loader2 size={13} className="animate-spin" /> Loading installments…
               </div>
             ) : repayError ? (
-              <div className="flex items-center gap-2 text-destructive text-xs bg-destructive/10 border border-destructive/20 rounded-lg px-3 py-2">
+              <div className="flex items-center gap-2 text-destructive text-xs px-3 py-2">
                 <AlertCircle size={12} className="shrink-0" />
                 {repayError}
                 <button onClick={fetchRepayments} className="ml-auto underline">Retry</button>

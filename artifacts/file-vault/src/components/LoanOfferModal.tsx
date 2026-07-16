@@ -412,7 +412,7 @@ export default function LoanOfferModal({ retailer, wholesaler, onClose }: Props)
               </div>
 
               {submitError && (
-                <div className="flex items-start gap-2 text-destructive text-sm bg-destructive/10 border border-destructive/20 rounded-lg px-3 py-2.5">
+                <div className="flex items-start gap-2 text-destructive text-sm px-3 py-2.5">
                   <AlertCircle size={14} className="shrink-0 mt-0.5" />
                   <span>{submitError}</span>
                 </div>

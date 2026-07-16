@@ -738,7 +738,7 @@ function PostProductForm({ sellerId, businessType, onSuccess, onCancel }: PostPr
           </div>
 
           {error && (
-            <div className="flex items-start gap-2 bg-destructive/10 border border-destructive/20 rounded-lg px-3 py-2.5">
+            <div className="flex items-start gap-2 px-3 py-2.5">
               <AlertCircle size={14} className="text-destructive shrink-0 mt-0.5" />
               <p className="text-xs text-destructive leading-snug">{error}</p>
             </div>

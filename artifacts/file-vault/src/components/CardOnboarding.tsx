@@ -180,7 +180,7 @@ export default function CardOnboarding({ onComplete }: Props) {
           </div>
 
           {status === "error" && (
-            <div className="flex items-start gap-2 bg-destructive/10 border border-destructive/30 rounded-lg px-3 py-2.5">
+            <div className="flex items-start gap-2 px-3 py-2.5">
               <X size={14} className="text-destructive shrink-0 mt-0.5" />
               <p className="text-xs text-destructive">{errorMsg}</p>
             </div>

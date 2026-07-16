@@ -496,7 +496,7 @@ function CardRequiredNotification({
       </div>
 
       {cardFlow.status === 'error' && (
-        <div className="flex items-start gap-2 bg-destructive/10 border border-destructive/30 rounded-lg px-3 py-2">
+        <div className="flex items-start gap-2 px-3 py-2">
           <X size={12} className="text-destructive shrink-0 mt-0.5" />
           <p className="text-xs text-destructive">{cardFlow.errorMsg}</p>
         </div>

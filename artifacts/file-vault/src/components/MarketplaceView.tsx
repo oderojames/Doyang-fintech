@@ -511,7 +511,7 @@ function BuyFlowModal({
 
         {step === 'error' && (
           <div className="space-y-3">
-            <div className="flex items-start gap-3 bg-destructive/10 border border-destructive/20 rounded-lg p-3">
+            <div className="flex items-start gap-3 p-3">
               <AlertCircle size={15} className="text-destructive shrink-0 mt-0.5" />
               <p className="text-sm text-destructive leading-snug">{error || 'Something went wrong.'}</p>
             </div>
@@ -1088,7 +1088,7 @@ function HpBuyFlowModal({
 
         {step === 'error' && (
           <div className="space-y-3">
-            <div className="flex items-start gap-3 bg-destructive/10 border border-destructive/20 rounded-lg p-3">
+            <div className="flex items-start gap-3 p-3">
               <AlertCircle size={15} className="text-destructive shrink-0 mt-0.5" />
               <p className="text-sm text-destructive leading-snug">{error || 'Something went wrong.'}</p>
             </div>

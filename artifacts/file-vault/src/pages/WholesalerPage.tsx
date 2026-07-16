@@ -862,7 +862,7 @@ function RetailersManagedTab({ wholesalerUid }: { wholesalerUid: string }) {
             {/* Step: error */}
             {paymentStep === 'error' && (
               <>
-                <div className="flex items-start gap-3 bg-destructive/10 border border-destructive/20 rounded-lg p-3">
+                <div className="flex items-start gap-3 p-3">
                   <AlertCircle size={16} className="text-destructive shrink-0 mt-0.5" />
                   <p className="text-sm text-destructive leading-snug">{paymentError || 'Payment failed. Please try again.'}</p>
                 </div>
@@ -1030,7 +1030,7 @@ function WholesalerDashboard() {
             />
           </div>
           {deleteError && (
-            <div className="flex items-center gap-2 text-destructive text-xs bg-destructive/10 border border-destructive/20 rounded-lg px-3 py-2 mb-3">
+            <div className="flex items-center gap-2 text-destructive text-xs px-3 py-2 mb-3">
               <AlertCircle size={12} className="shrink-0" />
               <span>{deleteError}</span>
             </div>

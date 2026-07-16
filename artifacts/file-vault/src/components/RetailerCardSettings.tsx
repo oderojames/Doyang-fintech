@@ -187,7 +187,7 @@ export default function RetailerCardSettings({ onClose, onConnected }: Props) {
 
         {/* Error */}
         {!loading && checkError && (
-          <div className="flex items-center gap-2 text-destructive text-sm bg-destructive/10 border border-destructive/20 rounded-xl px-4 py-3">
+          <div className="flex items-center gap-2 text-destructive text-sm px-4 py-3">
             <AlertTriangle size={14} className="shrink-0" />
             <span>{checkError}</span>
           </div>
@@ -303,7 +303,7 @@ export default function RetailerCardSettings({ onClose, onConnected }: Props) {
             </div>
 
             {connectError && (
-              <div className="flex items-center gap-2 text-destructive text-xs bg-destructive/10 border border-destructive/20 rounded-xl px-3 py-2.5">
+              <div className="flex items-center gap-2 text-destructive text-xs px-3 py-2.5">
                 <AlertTriangle size={13} className="shrink-0" />
                 <span>{connectError}</span>
               </div>
