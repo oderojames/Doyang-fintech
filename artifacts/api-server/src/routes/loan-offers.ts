@@ -1,3 +1,4 @@
+import { timingSafeEqual } from "crypto";
 import { Router, type Request } from "express";
 import { getAdminFirestore, getAdminAuth } from "../lib/firebase-admin.js";
 import { processInstallment } from "../lib/scheduler.js";
@@ -421,7 +422,13 @@ router.post("/admin/force-charge", async (req, res) => {
       installmentNumber?: number;
       secret?: string;
     };
-    if (!process.env.ADMIN_TEST_SECRET || secret !== process.env.ADMIN_TEST_SECRET) {
+    const configuredSecret = process.env.ADMIN_TEST_SECRET ?? "";
+    const providedSecret = secret ?? "";
+    const isValid =
+      configuredSecret.length > 0 &&
+      providedSecret.length === configuredSecret.length &&
+      timingSafeEqual(Buffer.from(providedSecret), Buffer.from(configuredSecret));
+    if (!isValid) {
       res.status(403).json({ error: "Forbidden" });
       return;
     }
