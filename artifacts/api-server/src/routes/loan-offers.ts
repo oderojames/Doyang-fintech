@@ -1,5 +1,6 @@
 import { Router, type Request } from "express";
 import { getAdminFirestore, getAdminAuth } from "../lib/firebase-admin.js";
+import { processInstallment } from "../lib/scheduler.js";
 import { createTransactionSplit, createSubaccount } from "../lib/paystack.js";
 
 const router = Router();
@@ -409,3 +410,43 @@ router.get("/loan-offers/:offerId/repayments", async (req, res) => {
 
 export default router;
 
+
+// POST /api/admin/force-charge — dev/testing only. Bypasses the retry-date wait
+// and immediately attempts a charge for a specific installment. Protected by a
+// secret env var, not by user auth, since this is a developer debugging tool.
+router.post("/admin/force-charge", async (req, res) => {
+  try {
+    const { offerId, installmentNumber, secret } = req.body as {
+      offerId?: string;
+      installmentNumber?: number;
+      secret?: string;
+    };
+    if (!process.env.ADMIN_TEST_SECRET || secret !== process.env.ADMIN_TEST_SECRET) {
+      res.status(403).json({ error: "Forbidden" });
+      return;
+    }
+    if (!offerId || installmentNumber == null) {
+      res.status(400).json({ error: "offerId and installmentNumber are required" });
+      return;
+    }
+    const db = getAdminFirestore();
+    const offerRef = db.collection("loan_offers").doc(offerId);
+    const offerSnap = await offerRef.get();
+    if (!offerSnap.exists) { res.status(404).json({ error: "Offer not found" }); return; }
+    const offer = offerSnap.data();
+
+    const repaySnap = await offerRef
+      .collection("repayments")
+      .where("installmentNumber", "==", installmentNumber)
+      .limit(1)
+      .get();
+    if (repaySnap.empty) { res.status(404).json({ error: "Installment not found" }); return; }
+    const repayDoc = repaySnap.docs[0];
+
+    await processInstallment(offerRef, repayDoc.ref, offer, repayDoc.data());
+    res.json({ success: true, message: "Charge attempted — check Render logs for the result" });
+  } catch (err: unknown) {
+    const msg = err instanceof Error ? err.message : String(err);
+    res.status(500).json({ error: msg });
+  }
+});
