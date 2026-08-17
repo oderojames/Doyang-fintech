@@ -1292,9 +1292,6 @@ export default function Vault() {
 
           {/* Header */}
           <div className="bg-gradient-to-br from-green-900/40 to-emerald-900/20 border-b border-border p-5 flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-green-500/20 border border-green-500/30 flex items-center justify-center shrink-0">
-              <Smartphone size={20} className="text-green-400" />
-            </div>
             <div>
               <p className="font-semibold text-sm text-foreground">M-Pesa Payment</p>
               <p className="text-xs text-muted-foreground">KSh 50 per statement analysis</p>
@@ -1317,19 +1314,16 @@ export default function Vault() {
                 </p>
                 <div className="space-y-2">
                   {([
-                    { value: 'sendmoney' as const, icon: <Phone size={15} className="text-green-400" />, label: 'Send Money / Pochi la Biashara', desc: 'Customers send money directly to your M-Pesa' },
-                    { value: 'paybill'   as const, icon: <CreditCard size={15} className="text-blue-400" />, label: 'M-Pesa PayBill', desc: 'Customers pay via your business PayBill number' },
-                    { value: 'tillnumber' as const, icon: <ShoppingBag size={15} className="text-amber-400" />, label: 'Till Number (Buy Goods)', desc: 'Customers scan your Lipa na M-Pesa till' },
-                    { value: 'bankpaybill' as const, icon: <Building2 size={15} className="text-purple-400" />, label: 'Bank PayBill', desc: 'Customers pay via your bank-linked PayBill' },
+                    { value: 'sendmoney' as const, label: 'Send Money / Pochi la Biashara', desc: 'Customers send money directly to your M-Pesa' },
+                    { value: 'paybill'   as const, label: 'M-Pesa PayBill', desc: 'Customers pay via your business PayBill number' },
+                    { value: 'tillnumber' as const, label: 'Till Number (Buy Goods)', desc: 'Customers scan your Lipa na M-Pesa till' },
+                    { value: 'bankpaybill' as const, label: 'Bank PayBill', desc: 'Customers pay via your bank-linked PayBill' },
                   ]).map(opt => (
                     <button
                       key={opt.value}
                       onClick={() => setSelectedPaymentMethod(opt.value)}
                       className={`w-full flex items-center gap-3 p-3 rounded-xl border-2 transition-all text-left ${selectedPaymentMethod === opt.value ? 'border-primary bg-primary/10' : 'border-border hover:border-primary/40 hover:bg-muted/30'}`}
                     >
-                      <div className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ${selectedPaymentMethod === opt.value ? 'bg-primary/20 border border-primary/30' : 'bg-muted border border-border'}`}>
-                        {opt.icon}
-                      </div>
                       <div className="min-w-0 flex-1">
                         <p className="text-xs font-semibold text-foreground leading-tight">{opt.label}</p>
                         <p className="text-[10px] text-muted-foreground leading-tight mt-0.5">{opt.desc}</p>
