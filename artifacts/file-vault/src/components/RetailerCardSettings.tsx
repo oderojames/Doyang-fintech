@@ -290,13 +290,17 @@ export default function RetailerCardSettings({ onClose, onConnected }: Props) {
             <div className="rounded-xl border border-border bg-muted/20 p-4 space-y-3">
               <div className="flex items-start gap-3">
                 <div className="w-9 h-9 rounded-xl bg-primary/15 border border-primary/20 flex items-center justify-center shrink-0">
-                  <CreditCard size={16} className="text-primary" />
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="2" y="5" width="20" height="14" rx="2" fill="currentColor" className="text-primary"/>
+                    <rect x="5" y="8" width="4" height="3" rx="0.5" fill="var(--card)"/>
+                    <rect x="5" y="14" width="6" height="1.4" rx="0.7" fill="var(--card)"/>
+                    <rect x="13" y="14" width="6" height="1.4" rx="0.7" fill="var(--card)"/>
+                  </svg>
                 </div>
                 <div>
                   <p className="text-sm font-semibold text-foreground">Verify a new card</p>
                   <p className="text-xs text-muted-foreground mt-0.5 leading-relaxed">
-                    A one-time KES 20 verification charge will be made and can be refunded on request.
-                    Your card details go directly to Paystack — we never store raw card numbers.
+                    To connect card you will be charged sh 20.
                   </p>
                 </div>
               </div>
@@ -319,7 +323,7 @@ export default function RetailerCardSettings({ onClose, onConnected }: Props) {
               ) : connectStatus === 'verifying' ? (
                 <><Loader2 size={14} className="animate-spin" /> Verifying card…</>
               ) : (
-                <><CreditCard size={14} /> Connect Card via Paystack</>
+                <><CreditCard size={14} /> Connect Mpesa Global Pay Card</>
               )}
             </button>
 
