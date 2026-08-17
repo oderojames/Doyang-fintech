@@ -1,4 +1,5 @@
 import { useLocation } from 'wouter';
+import { ShieldCheck } from 'lucide-react';
 
 export default function HomePage() {
   const [, navigate] = useLocation();
@@ -16,11 +17,8 @@ export default function HomePage() {
 
         {/* Brand */}
         <div className="text-center">
-          <div className="inline-flex items-center justify-center w-20 h-20 rounded-3xl bg-primary/20 border border-primary/30 mb-6 shadow-lg shadow-primary/10">
-            <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
-              <path d="M20 4L36 13V27L20 36L4 27V13L20 4Z" stroke="hsl(var(--primary))" strokeWidth="2" fill="hsl(var(--primary)/0.15)" strokeLinejoin="round"/>
-              <path d="M20 12L28 17V23L20 28L12 23V17L20 12Z" fill="hsl(var(--primary))" opacity="0.6"/>
-            </svg>
+          <div className="inline-flex items-center justify-center w-20 h-20 rounded-3xl bg-gradient-to-br from-primary to-primary/70 mb-6 shadow-lg shadow-primary/30">
+            <ShieldCheck size={38} className="text-white" strokeWidth={2} />
           </div>
           <p className="text-sm font-semibold tracking-[0.2em] uppercase text-primary mb-2">Welcome to</p>
           <h1 className="text-5xl font-extrabold tracking-tight text-foreground">Doyang</h1>
