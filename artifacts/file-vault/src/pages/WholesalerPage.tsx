@@ -723,9 +723,6 @@ function RetailersManagedTab({ wholesalerUid }: { wholesalerUid: string }) {
 
           {/* Header */}
           <div className="bg-gradient-to-br from-amber-900/40 to-amber-800/10 border-b border-border p-5 flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-amber-500/20 border border-amber-500/30 flex items-center justify-center shrink-0">
-              <CreditCard size={20} className="text-amber-400" />
-            </div>
             <div>
               <p className="font-semibold text-sm text-foreground">Upgrade Retailer Slots</p>
               <p className="text-xs text-muted-foreground">Pay via M-Pesa · Current limit: {quota}</p>
