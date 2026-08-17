@@ -34,7 +34,7 @@ export default function HomePage() {
           {/* Retailer card */}
           <button
             onClick={() => navigate('/retailer')}
-            className="group w-full bg-card border border-border hover:border-primary/50 hover:bg-primary/5 rounded-2xl p-6 text-left transition-all duration-200 shadow-sm hover:shadow-md hover:shadow-primary/10 active:scale-[0.99]"
+            className="group w-full bg-card border border-border hover:border-primary/50 hover:bg-primary/5 [@media(hover:none)]:border-primary/40 [@media(hover:none)]:bg-primary/5 rounded-2xl p-6 text-left transition-all duration-200 shadow-sm hover:shadow-md hover:shadow-primary/10 active:scale-[0.99]"
           >
             <div className="flex items-center gap-4">
               <div className="flex-1">
@@ -50,7 +50,7 @@ export default function HomePage() {
           {/* Wholesaler card */}
           <button
             onClick={() => navigate('/wholesaler')}
-            className="group w-full bg-card border border-border hover:border-primary/50 hover:bg-primary/5 rounded-2xl p-6 text-left transition-all duration-200 shadow-sm hover:shadow-md hover:shadow-primary/10 active:scale-[0.99]"
+            className="group w-full bg-card border border-border hover:border-primary/50 hover:bg-primary/5 [@media(hover:none)]:border-primary/40 [@media(hover:none)]:bg-primary/5 rounded-2xl p-6 text-left transition-all duration-200 shadow-sm hover:shadow-md hover:shadow-primary/10 active:scale-[0.99]"
           >
             <div className="flex items-center gap-4">
               <div className="flex-1">
@@ -66,7 +66,7 @@ export default function HomePage() {
           {/* Buyer card */}
           <button
             onClick={() => navigate('/buyer')}
-            className="group w-full bg-card border border-border hover:border-primary/50 hover:bg-primary/5 rounded-2xl p-6 text-left transition-all duration-200 shadow-sm hover:shadow-md hover:shadow-primary/10 active:scale-[0.99]"
+            className="group w-full bg-card border border-border hover:border-primary/50 hover:bg-primary/5 [@media(hover:none)]:border-primary/40 [@media(hover:none)]:bg-primary/5 rounded-2xl p-6 text-left transition-all duration-200 shadow-sm hover:shadow-md hover:shadow-primary/10 active:scale-[0.99]"
           >
             <div className="flex items-center gap-4">
               <div className="flex-1">
