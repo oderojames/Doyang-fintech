@@ -225,9 +225,6 @@ export default function LoanOfferModal({ retailer, wholesaler, onClose }: Props)
                 <ArrowLeft size={16} />
               </button>
             )}
-            <div className="w-9 h-9 rounded-xl bg-amber-500/20 border border-amber-500/30 flex items-center justify-center">
-              <Banknote size={18} className="text-amber-400" />
-            </div>
             <div>
               <p className="font-semibold text-sm text-foreground">Offer Credit</p>
               <p className="text-xs text-muted-foreground truncate max-w-[180px]">{retailer.retailerName || retailer.retailerEmail}</p>
@@ -269,7 +266,7 @@ export default function LoanOfferModal({ retailer, wholesaler, onClose }: Props)
           {step === 'form' && (
             <div className="p-5 space-y-4">
               <div className="space-y-1.5">
-                <label className="text-xs font-medium text-muted-foreground">Principal amount (KES)</label>
+                <label className="text-xs font-medium text-muted-foreground">Value of goods (KES)</label>
                 <input type="number" min="1" value={principal} onChange={e => setPrincipal(e.target.value)}
                   placeholder="e.g. 50000"
                   className="w-full px-3 py-2.5 rounded-lg border border-input bg-background text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring" />
