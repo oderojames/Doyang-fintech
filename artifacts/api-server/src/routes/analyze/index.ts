@@ -340,7 +340,7 @@ function computeScore(
     switch (paymentMethod) {
       case "paybill":     return PAYBILL_IN_RE.test(t.description);
       case "tillnumber":  return TILLNUMBER_IN_RE.test(t.description);
-      case "bankpaybill": return BANK_IN_RE.test(t.description);
+      case "bankpaybill": return true; // already balance-delta verified as a credit
       default:            return true; // sendmoney: all credits count
     }
   };
@@ -1084,7 +1084,9 @@ router.post("/analyze/mpesa", async (req, res) => {
 
   try {
     // ── Step 1: Parse transactions ────────────────────────────────────────────
-    let transactions = dedup(parseTransactions(text.trim()));
+    let transactions = paymentMethod === "bankpaybill"
+      ? dedup(parseBankStatementTransactions(text.trim()))
+      : dedup(parseTransactions(text.trim()));
     transactions.sort((a, b) => a.date.localeCompare(b.date));
 
     if (transactions.length === 0) {
@@ -1278,3 +1280,80 @@ router.post("/analyze/mpesa", async (req, res) => {
 });
 
 export default router;
+
+// ─── Bank statement parsing (balance-delta method) ─────────────────────────────
+// Unlike M-Pesa parsing, this doesn't rely on receipt numbers or column-position
+// matching (which we found is unreliable across banks due to right-aligned
+// amount columns not lining up with header text positions). Instead, it tracks
+// the running balance printed on every row: if the balance goes up, it was a
+// credit; if it goes down, a debit. This works regardless of bank, column
+// naming ("Money In" vs "Paid In" vs "Credit"), or alignment quirks, as long as
+// each transaction row prints a date and a running balance.
+const BANK_FEE_RE = /charge|commission|\bfee\b|excise duty|\bcot\b|ledger|maintenance/i;
+const BANK_MONEY_RE = /\b\d{1,3}(?:,\d{3})*\.\d{2}\b/g;
+
+function parseBankStatementTransactions(rawText: string): RawTransaction[] {
+  const results: RawTransaction[] = [];
+  const text = rawText.replace(/\r\n|\r/g, "\n").replace(/\t/g, " ");
+  const lines = text
+    .split("\n")
+    .map(l => l.replace(/\s{2,}/g, " ").trim())
+    .filter(l => l.length > 3);
+
+  let previousBalance: number | null = null;
+
+  for (const line of lines) {
+    if (FAILED_RE.test(line)) continue;
+
+    const moneyMatchObjs = [...line.matchAll(BANK_MONEY_RE)];
+    if (moneyMatchObjs.length === 0) continue;
+    const moneyValues = moneyMatchObjs.map(m => parseFloat(m[0].replace(/,/g, "")));
+    const currentBalance = moneyValues[moneyValues.length - 1];
+
+    const date = extractDate(line);
+
+    if (!date) {
+      // No date on this line — likely an opening-balance row, a page/grand
+      // total, or other noise. Use it to seed the starting balance if we
+      // haven't found one yet and it looks like a lone balance figure.
+      if (
+        previousBalance === null &&
+        (/\bopening balance\b|\bb\/f\b|\bbrought forward\b/i.test(line) ||
+          (moneyValues.length === 1 && /\b(cr|dr)\b/i.test(line)))
+      ) {
+        previousBalance = currentBalance;
+      }
+      continue;
+    }
+
+    if (previousBalance === null) {
+      // First dated row with no opening balance found yet — seed from this
+      // row's balance and skip it (no prior balance to diff against).
+      previousBalance = currentBalance;
+      continue;
+    }
+
+    const delta = round2(currentBalance - previousBalance);
+    previousBalance = currentBalance;
+    if (delta === 0) continue;
+
+    let description = line;
+    for (const mo of moneyMatchObjs) description = description.split(mo[0]).join("");
+    description = description
+      .replace(/\b\d{1,2}[\/\-]\d{1,2}[\/\-]\d{2,4}\b/g, "")
+      .replace(/\b(cr|dr)\b/gi, "")
+      .replace(/\s{2,}/g, " ")
+      .trim();
+
+    const isFee = BANK_FEE_RE.test(description);
+    results.push({
+      date,
+      amount: Math.abs(delta),
+      type: delta > 0 ? "credit" : "debit",
+      description: description || "Bank transaction",
+      category: isFee ? "fees" : delta > 0 ? "income" : "expense",
+      isFee,
+    });
+  }
+  return results;
+}
