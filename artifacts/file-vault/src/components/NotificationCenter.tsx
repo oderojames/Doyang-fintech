@@ -256,6 +256,7 @@ export default function NotificationCenter({
                 <X size={15} />
               </button>
             </div>
+            {totalBadge > 0 && (unreadCount > 0 || pending.length > 0) && (<div className="px-4 py-1.5 border-b border-border/60 bg-muted/10 text-[11px] text-muted-foreground">{unreadCount > 0 ? `${unreadCount} notification${unreadCount !== 1 ? 's' : ''}` : ''}{unreadCount > 0 && pending.length > 0 ? ' · ' : ''}{pending.length > 0 ? `${pending.length} pending offer${pending.length !== 1 ? 's' : ''} awaiting your response` : ''}</div>)}
 
             <div className="flex-1 overflow-y-auto">
 
