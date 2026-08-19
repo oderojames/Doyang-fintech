@@ -228,8 +228,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     await reload(auth.currentUser);
     if (auth.currentUser.emailVerified) {
       const snap = await getDoc(doc(db, 'users', auth.currentUser.uid)).catch(() => null);
-      const role = (snap?.data()?.role as 'retailer' | 'wholesaler') ?? 'retailer';
-      setUser(Object.assign(auth.currentUser, { role }));
+      const role = (snap?.data()?.role as 'retailer' | 'wholesaler' | 'buyer') ?? 'retailer';
+      // Create a NEW object (same prototype, so methods like getIdToken still
+      // work) instead of mutating auth.currentUser in place. Mutating and
+      // returning the same reference makes React think nothing changed, so
+      // setUser() silently no-ops and the screen never updates.
+      const updatedUser = Object.assign(
+        Object.create(Object.getPrototypeOf(auth.currentUser)),
+        auth.currentUser,
+        { role }
+      );
+      setUser(updatedUser);
       return true;
     }
     return false;
