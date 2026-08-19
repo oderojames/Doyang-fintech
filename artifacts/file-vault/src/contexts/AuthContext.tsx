@@ -185,11 +185,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     await updateProfile(cred.user, { displayName: name });
     await ensureUserDoc(cred.user, role, businessType);
     const portalPath = role === 'wholesaler' ? 'wholesaler' : role === 'buyer' ? 'buyer' : 'retailer';
-    const continueUrl = `${window.location.origin}/${portalPath}?verified=1`;
-    fetch('/api/email/send-verification', {
+    void portalPath;
+    fetch('/api/email/send-otp', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email: cred.user.email, continueUrl }),
+      body: JSON.stringify({ email: cred.user.email }),
     }).catch(() => {});
     if (role === 'retailer') {
       setNeedsCardOnboarding(true);
@@ -199,17 +199,28 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const sendVerificationEmail = async () => {
     if (!auth.currentUser?.email) return;
-    const role = user?.role ?? 'retailer';
-    const continueUrl = `${window.location.origin}/${role === 'wholesaler' ? 'wholesaler' : 'retailer'}?verified=1`;
-    const res = await fetch('/api/email/send-verification', {
+    const res = await fetch('/api/email/send-otp', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email: auth.currentUser.email, continueUrl }),
+      body: JSON.stringify({ email: auth.currentUser.email }),
     });
     if (!res.ok) {
       const data = await res.json().catch(() => ({})) as { error?: string };
-      throw new Error(data.error ?? 'Failed to send verification email');
+      throw new Error(data.error ?? 'Failed to send verification code');
     }
+  };
+  const verifyOtp = async (code: string): Promise<boolean> => {
+    if (!auth.currentUser?.email) return false;
+    const res = await fetch('/api/email/verify-otp', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: auth.currentUser.email, code }),
+    });
+    const data = await res.json().catch(() => ({})) as { success?: boolean; error?: string };
+    if (!res.ok || !data.success) {
+      throw new Error(data.error ?? 'Failed to verify code');
+    }
+    return reloadUser();
   };
 
   const reloadUser = async (): Promise<boolean> => {
@@ -296,7 +307,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const completeSettlementOnboarding = () => setNeedsSettlementOnboarding(false);
 
   return (
-    <AuthContext.Provider value={{ user, loading, profileComplete, needsCardOnboarding, cardConnected, paystackAuth, markCardConnected, completeCardOnboarding, needsSettlementOnboarding, settlementConnected, markSettlementConnected, completeSettlementOnboarding, buyerCardConnected, markBuyerCardConnected, signInWithEmail, signUpWithEmail, signInWithGoogle, completeProfile, signOut, sendPasswordReset, deleteAccount, sendVerificationEmail, reloadUser }}>
+    <AuthContext.Provider value={{ user, loading, profileComplete, needsCardOnboarding, cardConnected, paystackAuth, markCardConnected, completeCardOnboarding, needsSettlementOnboarding, settlementConnected, markSettlementConnected, completeSettlementOnboarding, buyerCardConnected, markBuyerCardConnected, signInWithEmail, signUpWithEmail, signInWithGoogle, completeProfile, signOut, sendPasswordReset, deleteAccount, sendVerificationEmail, verifyOtp, reloadUser }}>
       {children}
     </AuthContext.Provider>
   );

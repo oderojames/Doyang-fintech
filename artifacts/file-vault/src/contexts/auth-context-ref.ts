@@ -34,6 +34,7 @@ export interface AuthContextValue {
   sendPasswordReset: (email: string) => Promise<void>;
   deleteAccount: (password: string) => Promise<void>;
   sendVerificationEmail: () => Promise<void>;
+  verifyOtp: (code: string) => Promise<boolean>;
   reloadUser: () => Promise<boolean>;
 }
 

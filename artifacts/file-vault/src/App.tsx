@@ -78,28 +78,12 @@ function WrongPortalScreen({
 }
 
 function EmailVerificationScreen({ accentClass = 'text-primary', borderClass = 'border-primary/30', bgClass = 'bg-primary/20' }: { accentClass?: string; borderClass?: string; bgClass?: string }) {
-  const { user, signOut, sendVerificationEmail, reloadUser } = useAuth();
+  const { user, signOut, sendVerificationEmail, verifyOtp } = useAuth();
   const [, navigate] = useLocation();
   const [resendStatus, setResendStatus] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle');
-  const [checkStatus, setCheckStatus] = useState<'idle' | 'checking' | 'not-yet'>('idle');
-
-  // Auto-verify when the user lands back on the app after clicking the link
-  useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    if (params.get('verified') !== '1') return;
-    // Clean the param from the URL without a page reload
-    const clean = new URL(window.location.href);
-    clean.searchParams.delete('verified');
-    window.history.replaceState({}, '', clean.toString());
-    // Reload auth state — if verified, setUser is called and the gate lifts
-    setCheckStatus('checking');
-    reloadUser().then((ok) => {
-      if (!ok) {
-        setCheckStatus('not-yet');
-        setTimeout(() => setCheckStatus('idle'), 3000);
-      }
-    });
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  const [code, setCode] = useState('');
+  const [verifyStatus, setVerifyStatus] = useState<'idle' | 'checking' | 'error'>('idle');
+  const [verifyError, setVerifyError] = useState('');
 
   const handleResend = async () => {
     setResendStatus('sending');
@@ -113,12 +97,19 @@ function EmailVerificationScreen({ accentClass = 'text-primary', borderClass = '
     }
   };
 
-  const handleContinue = async () => {
-    setCheckStatus('checking');
-    const verified = await reloadUser();
-    if (!verified) {
-      setCheckStatus('not-yet');
-      setTimeout(() => setCheckStatus('idle'), 3000);
+  const handleVerify = async () => {
+    if (code.trim().length !== 6) return;
+    setVerifyStatus('checking');
+    setVerifyError('');
+    try {
+      const ok = await verifyOtp(code.trim());
+      if (!ok) {
+        setVerifyError('Could not verify. Please try again.');
+        setVerifyStatus('error');
+      }
+    } catch (e: any) {
+      setVerifyError(e?.message ?? 'Incorrect or expired code. Please try again.');
+      setVerifyStatus('error');
     }
   };
 
@@ -133,38 +124,50 @@ function EmailVerificationScreen({ accentClass = 'text-primary', borderClass = '
           <div>
             <h2 className="text-xl font-bold text-foreground">Verify your email</h2>
             <p className="text-sm text-muted-foreground mt-2 leading-relaxed">
-              We sent a verification link to{' '}
+              We sent a 6-digit code to{' '}
               <span className="font-semibold text-foreground">{user?.email}</span>.
-              <br />Open it to activate your account, then click <em>Continue</em>.
+              <br />Enter it below to activate your account.
             </p>
           </div>
 
           <div className="space-y-2 pt-1">
-            <button
-              onClick={handleContinue}
-              disabled={checkStatus === 'checking'}
-              className="w-full inline-flex items-center justify-center gap-2 rounded-lg bg-primary hover:bg-primary/90 text-primary-foreground font-semibold py-2.5 px-4 transition-colors text-sm disabled:opacity-60"
-            >
-              {checkStatus === 'checking' ? (
-                <><RefreshCw size={14} className="animate-spin" /> Checking…</>
-              ) : (
-                <><CheckCircle2 size={14} /> I've verified — Continue</>
-              )}
-            </button>
+            <input
+              type="text"
+              inputMode="numeric"
+              maxLength={6}
+              value={code}
+              onChange={e => { setCode(e.target.value.replace(/\D/g, '')); setVerifyStatus('idle'); }}
+              onKeyDown={e => { if (e.key === 'Enter' && code.trim().length === 6) handleVerify(); }}
+              placeholder="000000"
+              autoFocus
+              className="w-full text-center text-2xl font-bold tracking-[0.5em] rounded-lg border border-input bg-background text-foreground py-3 px-4 focus:outline-none focus:ring-2 focus:ring-ring"
+            />
 
-            {checkStatus === 'not-yet' && (
-              <div className="flex items-center gap-2 text-amber-400 text-xs bg-amber-500/10 border border-amber-500/20 rounded-lg px-3 py-2 justify-center">
+            {verifyStatus === 'error' && verifyError && (
+              <div className="flex items-center gap-2 text-destructive text-xs justify-center">
                 <AlertCircle size={13} />
-                Email not verified yet. Please click the link in your inbox first.
+                <span>{verifyError}</span>
               </div>
             )}
+
+            <button
+              onClick={handleVerify}
+              disabled={verifyStatus === 'checking' || code.trim().length !== 6}
+              className="w-full inline-flex items-center justify-center gap-2 rounded-lg bg-primary hover:bg-primary/90 text-primary-foreground font-semibold py-2.5 px-4 transition-colors text-sm disabled:opacity-60"
+            >
+              {verifyStatus === 'checking' ? (
+                <><RefreshCw size={14} className="animate-spin" /> Verifying…</>
+              ) : (
+                <><CheckCircle2 size={14} /> Verify code</>
+              )}
+            </button>
 
             <button
               onClick={handleResend}
               disabled={resendStatus === 'sending' || resendStatus === 'sent'}
               className="w-full inline-flex items-center justify-center gap-2 rounded-lg border border-border hover:bg-muted text-foreground font-medium py-2.5 px-4 transition-colors text-sm disabled:opacity-60"
             >
-              {resendStatus === 'sending' ? 'Sending…' : resendStatus === 'sent' ? '✓ Email resent!' : 'Resend verification email'}
+              {resendStatus === 'sending' ? 'Sending…' : resendStatus === 'sent' ? '✓ Code resent!' : 'Resend code'}
             </button>
 
             <button

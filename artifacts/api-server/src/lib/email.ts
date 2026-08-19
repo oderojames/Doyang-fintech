@@ -179,6 +179,50 @@ function passwordResetTemplate(displayName: string | undefined, resetLink: strin
   );
 }
 
+// ── OTP (one-time password) email template ──────────────────────────────────
+
+function otpTemplate(displayName: string | undefined, code: string): string {
+  const greeting = displayName ? `Hi ${displayName},` : 'Hi there,';
+  return baseTemplate(
+    `Your Doyang verification code is ${code}.`,
+    `
+    <!-- Icon -->
+    <table cellpadding="0" cellspacing="0" role="presentation" style="margin-bottom:24px;">
+      <tr>
+        <td style="background-color:#eff6ff;border-radius:12px;padding:14px;display:inline-block;">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M20 4H4C2.9 4 2 4.9 2 6V18C2 19.1 2.9 20 4 20H20C21.1 20 22 19.1 22 18V6C22 4.9 21.1 4 20 4Z" stroke="#3b82f6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M22 6L12 13L2 6" stroke="#3b82f6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </td>
+      </tr>
+    </table>
+
+    <!-- Heading -->
+    <h1 style="margin:0 0 8px;color:#0f172a;font-size:24px;font-weight:700;letter-spacing:-0.4px;line-height:1.2;">Verify your email</h1>
+    <p style="margin:0 0 24px;color:#64748b;font-size:15px;line-height:1.6;">${greeting} Welcome to Doyang. Enter this code in the app to activate your account.</p>
+
+    <!-- Divider -->
+    <div style="height:1px;background-color:#f1f5f9;margin-bottom:28px;"></div>
+
+    <!-- OTP Code -->
+    <table cellpadding="0" cellspacing="0" role="presentation" style="margin-bottom:28px;width:100%;">
+      <tr>
+        <td align="center" style="background-color:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:20px;">
+          <span style="color:#0f172a;font-size:36px;font-weight:700;letter-spacing:10px;font-family:monospace;">${code}</span>
+        </td>
+      </tr>
+    </table>
+
+    <!-- Expiry note -->
+    <p style="margin:0 0 20px;color:#94a3b8;font-size:13px;line-height:1.5;">
+      This code expires in <strong style="color:#64748b;">10 minutes</strong>. If you didn't request this, you can safely ignore this email.
+    </p>
+
+    `
+  );
+}
+
 // ── Public send functions ───────────────────────────────────────────────────
 
 export async function sendVerificationEmail(
@@ -205,6 +249,34 @@ export async function sendVerificationEmail(
   } catch (err) {
     const message = err instanceof Error ? err.message : 'Unknown error';
     logger.error({ err, email }, '[email] sendVerificationEmail: unexpected error');
+    return { success: false, error: message };
+  }
+}
+
+export async function sendOtpEmail(
+  email: string,
+  code: string,
+  displayName?: string
+): Promise<{ success: boolean; error?: string }> {
+  try {
+    const resend = getResend();
+    const { error } = await resend.emails.send({
+      from: FROM,
+      to: email,
+      subject: `${code} is your Doyang verification code`,
+      html: otpTemplate(displayName, code),
+    });
+
+    if (error) {
+      logger.error({ error, email }, '[email] sendOtpEmail: Resend API error');
+      return { success: false, error: error.message };
+    }
+
+    logger.info({ email }, '[email] OTP email sent');
+    return { success: true };
+  } catch (err) {
+    const message = err instanceof Error ? err.message : 'Unknown error';
+    logger.error({ err, email }, '[email] sendOtpEmail: unexpected error');
     return { success: false, error: message };
   }
 }
