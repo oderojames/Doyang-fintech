@@ -1,3 +1,4 @@
+import ErrorMessage from '@/components/ErrorMessage';
 import { useState } from 'react';
 import { useLocation } from 'wouter';
 import { ShieldCheck, Building2, User, Tag, AlertCircle, LogOut } from 'lucide-react';
@@ -88,12 +89,7 @@ export default function CompleteProfileScreen({ role }: { role: 'retailer' | 'wh
               </select>
             </div>
 
-            {error && (
-              <div className="flex items-center gap-2 text-destructive text-sm px-3 py-2">
-                <AlertCircle size={14} className="shrink-0" />
-                <span>{error}</span>
-              </div>
-            )}
+            {error && <ErrorMessage message={error} />}
 
             <Button
               type="submit"

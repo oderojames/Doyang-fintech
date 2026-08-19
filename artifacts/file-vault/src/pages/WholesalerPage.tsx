@@ -1,3 +1,4 @@
+import ErrorMessage from '@/components/ErrorMessage';
 import { useState, useEffect, useRef } from 'react';
 import { useLocation } from 'wouter';
 import { useAuth } from '@/contexts/AuthContext';
@@ -859,10 +860,7 @@ function RetailersManagedTab({ wholesalerUid }: { wholesalerUid: string }) {
             {/* Step: error */}
             {paymentStep === 'error' && (
               <>
-                <div className="flex items-start gap-3 p-3">
-                  <AlertCircle size={16} className="text-destructive shrink-0 mt-0.5" />
-                  <p className="text-sm text-destructive leading-snug">{paymentError || 'Payment failed. Please try again.'}</p>
-                </div>
+                <ErrorMessage message={paymentError || 'Payment failed. Please try again.'} align="start" />
                 <div className="flex gap-2">
                   <Button variant="outline" className="flex-1" onClick={() => { setPaymentStep('tiers'); setSelectedTier(null); }}>Change Plan</Button>
                   <Button variant="outline" className="flex-1" onClick={() => { setPaymentStep('phone'); setPaymentError(null); }}>Try Again</Button>
@@ -1027,10 +1025,7 @@ function WholesalerDashboard() {
             />
           </div>
           {deleteError && (
-            <div className="flex items-center gap-2 text-destructive text-xs px-3 py-2 mb-3">
-              <AlertCircle size={12} className="shrink-0" />
-              <span>{deleteError}</span>
-            </div>
+            <div className="mb-3"><ErrorMessage message={deleteError ?? ''} size="xs" /></div>
           )}
           <div className="flex gap-2">
             <button

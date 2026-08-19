@@ -1,3 +1,4 @@
+import ErrorMessage from '@/components/ErrorMessage';
 import { useState, useEffect } from "react";
 import { CreditCard, Shield, RefreshCw, X, CheckCircle2 } from "lucide-react";
 import { doc, updateDoc, setDoc } from "firebase/firestore";
@@ -180,10 +181,7 @@ export default function CardOnboarding({ onComplete }: Props) {
           </div>
 
           {status === "error" && (
-            <div className="flex items-start gap-2 px-3 py-2.5">
-              <X size={14} className="text-destructive shrink-0 mt-0.5" />
-              <p className="text-xs text-destructive">{errorMsg}</p>
-            </div>
+            <ErrorMessage message={errorMsg} size="xs" align="start" />
           )}
 
           <div className="pt-2 space-y-2.5">

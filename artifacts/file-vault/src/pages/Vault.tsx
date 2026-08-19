@@ -1,3 +1,4 @@
+import ErrorMessage from '@/components/ErrorMessage';
 import { useState, useEffect, useCallback, useRef } from 'react';
 import * as pdfjsLib from 'pdfjs-dist';
 import pdfjsWorker from 'pdfjs-dist/build/pdf.worker.min.mjs?url';
@@ -1256,10 +1257,7 @@ export default function Vault() {
             />
           </div>
           {deleteError && (
-            <div className="flex items-center gap-2 text-destructive text-xs px-3 py-2 mb-3">
-              <AlertCircle size={12} className="shrink-0" />
-              <span>{deleteError}</span>
-            </div>
+            <div className="mb-3"><ErrorMessage message={deleteError ?? ''} size="xs" /></div>
           )}
           <div className="flex gap-2">
             <button
@@ -1420,10 +1418,7 @@ export default function Vault() {
             {/* Step: error */}
             {paymentStep === 'error' && (
               <>
-                <div className="flex items-start gap-3 p-3">
-                  <AlertCircle size={16} className="text-destructive shrink-0 mt-0.5" />
-                  <p className="text-sm text-destructive leading-snug">{paymentError || 'Payment failed. Please try again.'}</p>
-                </div>
+                <ErrorMessage message={paymentError || 'Payment failed. Please try again.'} align="start" />
                 <Button
                   className="w-full gap-2"
                   variant="outline"
