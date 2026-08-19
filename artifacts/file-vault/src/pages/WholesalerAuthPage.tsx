@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useLocation } from 'wouter';
 import { ShieldCheck, Mail, Lock, User, Eye, EyeOff, AlertCircle, Tag } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import ErrorMessage from '@/components/ErrorMessage';
 import { Input } from '@/components/ui/input';
 import { useAuth } from '@/contexts/AuthContext';
 import { BUSINESS_TYPES } from '@/lib/businessTypes';
@@ -208,17 +209,11 @@ export default function WholesalerAuthPage() {
             )}
 
             {tab === 'signin' && resetStatus === 'error' && resetError && (
-              <div className="flex items-center gap-2 text-destructive text-sm px-3 py-2">
-                <AlertCircle size={14} className="shrink-0" />
-                <span>{resetError}</span>
-              </div>
+              <ErrorMessage message={resetError} />
             )}
 
             {error && (
-              <div className="flex items-center gap-2 text-destructive text-sm px-3 py-2">
-                <AlertCircle size={14} className="shrink-0" />
-                <span>{error}</span>
-              </div>
+              <ErrorMessage message={error ?? ''} />
             )}
 
             <Button

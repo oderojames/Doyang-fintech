@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useLocation } from 'wouter';
 import { ShieldCheck, Mail, Lock, User, Eye, EyeOff, AlertCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import ErrorMessage from '@/components/ErrorMessage';
 import { Input } from '@/components/ui/input';
 import { useAuth } from '@/contexts/AuthContext';
 
@@ -182,17 +183,11 @@ export default function BuyerAuthPage() {
             )}
 
             {tab === 'signin' && resetStatus === 'error' && resetError && (
-              <div className="flex items-center gap-2 text-destructive text-sm px-3 py-2">
-                <AlertCircle size={14} className="shrink-0" />
-                <span>{resetError}</span>
-              </div>
+              <ErrorMessage message={resetError} />
             )}
 
             {error && (
-              <div className="flex items-center gap-2 text-destructive text-sm px-3 py-2">
-                <AlertCircle size={14} className="shrink-0" />
-                <span>{error}</span>
-              </div>
+              <ErrorMessage message={error ?? ''} />
             )}
 
             <Button type="submit" className="w-full font-semibold bg-primary hover:bg-primary/90 text-primary-foreground border-0" disabled={loading}>
