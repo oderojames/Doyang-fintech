@@ -1,3 +1,4 @@
+import ErrorMessage from '@/components/ErrorMessage';
 import { useState, useEffect, useCallback } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { auth } from '@/lib/firebase';
@@ -306,8 +307,7 @@ function LoanCard({ offer }: LoanCardProps) {
               </div>
             ) : repayError ? (
               <div className="flex items-center gap-2 text-destructive text-xs px-3 py-2">
-                <AlertCircle size={12} className="shrink-0" />
-                {repayError}
+                <ErrorMessage message={repayError ?? ''} size="xs" />
                 <button onClick={fetchRepayments} className="ml-auto underline">Retry</button>
               </div>
             ) : repayments.length === 0 ? (

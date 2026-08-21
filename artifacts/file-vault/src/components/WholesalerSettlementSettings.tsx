@@ -1,3 +1,4 @@
+import ErrorMessage from '@/components/ErrorMessage';
 import { useState, useEffect } from 'react';
 import {
   X, Landmark, AlertTriangle, CheckCircle2, Loader2,
@@ -266,10 +267,7 @@ export default function WholesalerSettlementSettings({ onClose }: Props) {
         )}
 
         {!loading && checkError && (
-          <div className="flex items-center gap-2 text-destructive text-sm px-4 py-3">
-            <AlertTriangle size={14} className="shrink-0" />
-            <span>{checkError}</span>
-          </div>
+          <ErrorMessage message={checkError} />
         )}
 
         {/* ── Overview ── */}
@@ -466,10 +464,7 @@ export default function WholesalerSettlementSettings({ onClose }: Props) {
             )}
 
             {saveError && (
-              <div className="flex items-center gap-2 text-destructive text-xs px-3 py-2.5">
-                <AlertTriangle size={13} className="shrink-0" />
-                <span>{saveError}</span>
-              </div>
+              <ErrorMessage message={saveError} size="xs" />
             )}
 
             {saved && (

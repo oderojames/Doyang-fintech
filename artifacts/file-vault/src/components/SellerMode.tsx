@@ -1,3 +1,4 @@
+import ErrorMessage from '@/components/ErrorMessage';
 import { useState, useEffect, useRef } from 'react';
 import {
   Store, RefreshCw, X, Upload, Clock, CheckCircle2, Star, CreditCard, FileUp, XCircle,
@@ -738,10 +739,7 @@ function PostProductForm({ sellerId, businessType, onSuccess, onCancel }: PostPr
           </div>
 
           {error && (
-            <div className="flex items-start gap-2 px-3 py-2.5">
-              <AlertCircle size={14} className="text-destructive shrink-0 mt-0.5" />
-              <p className="text-xs text-destructive leading-snug">{error}</p>
-            </div>
+            <ErrorMessage message={error} size="xs" align="start" />
           )}
 
           <div className="flex gap-2 pt-1">

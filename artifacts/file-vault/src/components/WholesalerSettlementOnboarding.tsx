@@ -1,3 +1,4 @@
+import ErrorMessage from '@/components/ErrorMessage';
 import { useState } from 'react';
 import { CreditCard, Loader2, CheckCircle2, AlertCircle, ArrowLeft, ChevronDown, Landmark, Smartphone } from 'lucide-react';
 import { doc, updateDoc, setDoc } from 'firebase/firestore';
@@ -446,10 +447,7 @@ export default function WholesalerSettlementOnboarding({ onComplete, fullscreen 
               </div>
 
               {submitError && (
-                <div className="flex items-start gap-2 text-destructive text-sm px-3 py-2.5">
-                  <AlertCircle size={14} className="shrink-0 mt-0.5" />
-                  <span>{submitError}</span>
-                </div>
+                <ErrorMessage message={submitError} align="start" />
               )}
 
               <button

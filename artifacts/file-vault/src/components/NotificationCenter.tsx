@@ -1,3 +1,4 @@
+import ErrorMessage from '@/components/ErrorMessage';
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { createPortal } from 'react-dom';
 import { Bell, CreditCard, X, CheckCircle2, XCircle, Loader2, Banknote, Zap, RefreshCw, ChevronDown, Store, Upload, ShoppingBag } from 'lucide-react';
@@ -497,10 +498,7 @@ function CardRequiredNotification({
       </div>
 
       {cardFlow.status === 'error' && (
-        <div className="flex items-start gap-2 px-3 py-2">
-          <X size={12} className="text-destructive shrink-0 mt-0.5" />
-          <p className="text-xs text-destructive">{cardFlow.errorMsg}</p>
-        </div>
+        <ErrorMessage message={cardFlow.errorMsg} size="xs" align="start" />
       )}
 
       <button
