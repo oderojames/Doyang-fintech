@@ -1,3 +1,4 @@
+import ErrorMessage from '@/components/ErrorMessage';
 import { useState, useEffect, useRef } from 'react';
 import {
   ShoppingBag, AlertCircle, RefreshCw, Phone, CheckCircle2,
@@ -445,10 +446,7 @@ function BuyFlowModal({
                 />
               </div>
               {error && (
-                <div className="flex items-center gap-1.5 mt-2 text-xs text-destructive">
-                  <AlertCircle size={12} className="shrink-0" />
-                  {error}
-                </div>
+                <div className="mt-2"><ErrorMessage message={error ?? ''} size="xs" /></div>
               )}
             </div>
             <Button
@@ -511,10 +509,7 @@ function BuyFlowModal({
 
         {step === 'error' && (
           <div className="space-y-3">
-            <div className="flex items-start gap-3 p-3">
-              <AlertCircle size={15} className="text-destructive shrink-0 mt-0.5" />
-              <p className="text-sm text-destructive leading-snug">{error || 'Something went wrong.'}</p>
-            </div>
+            <ErrorMessage message={error || 'Something went wrong.'} align="start" />
             <Button
               variant="outline"
               className="w-full gap-2"
@@ -706,9 +701,7 @@ function BuyerSettingsPanel({ onClose }: { onClose: () => void }) {
                   </div>
                 )}
                 {disconnectError && (
-                  <div className="flex items-center gap-1.5 text-xs text-destructive">
-                    <AlertCircle size={11} className="shrink-0" /> {disconnectError}
-                  </div>
+                  <ErrorMessage message={disconnectError ?? ''} size="xs" />
                 )}
                 <div className="flex gap-2">
                   <Button variant="outline" size="sm" className="flex-1 gap-1.5 text-xs" onClick={openPaystack} disabled={adding || activeHp.length > 0}>
@@ -1008,9 +1001,7 @@ function HpBuyFlowModal({
                 />
               </div>
               {error && (
-                <div className="flex items-center gap-1.5 mt-2 text-xs text-destructive">
-                  <AlertCircle size={12} className="shrink-0" />{error}
-                </div>
+                <div className="mt-2"><ErrorMessage message={error ?? ''} size="xs" /></div>
               )}
             </div>
             <Button
@@ -1088,10 +1079,7 @@ function HpBuyFlowModal({
 
         {step === 'error' && (
           <div className="space-y-3">
-            <div className="flex items-start gap-3 p-3">
-              <AlertCircle size={15} className="text-destructive shrink-0 mt-0.5" />
-              <p className="text-sm text-destructive leading-snug">{error || 'Something went wrong.'}</p>
-            </div>
+            <ErrorMessage message={error || 'Something went wrong.'} align="start" />
             <Button variant="outline" className="w-full gap-2" onClick={() => { setStep('phone'); setError(null); }}>
               <RefreshCw size={13} /> Try Again
             </Button>
@@ -1254,9 +1242,7 @@ export default function MarketplaceView() {
           </div>
         ) : fetchError ? (
           <div className="flex flex-col items-center justify-center py-20 gap-4">
-            <div className="flex items-center gap-2 text-destructive text-sm">
-              <AlertCircle size={16} /> {fetchError}
-            </div>
+            <ErrorMessage message={fetchError ?? ''} />
             <Button variant="outline" size="sm" onClick={() => setRetryKey(k => k + 1)} className="gap-2">
               <RefreshCw size={13} /> Retry
             </Button>

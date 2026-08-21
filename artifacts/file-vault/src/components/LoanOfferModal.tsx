@@ -1,3 +1,4 @@
+import ErrorMessage from '@/components/ErrorMessage';
 import { useState, useMemo } from 'react';
 import { X, ArrowLeft, Loader2, CheckCircle2, AlertCircle, Banknote, ChevronDown } from 'lucide-react';
 import { auth } from '@/lib/firebase';
@@ -409,10 +410,7 @@ export default function LoanOfferModal({ retailer, wholesaler, onClose }: Props)
               </div>
 
               {submitError && (
-                <div className="flex items-start gap-2 text-destructive text-sm px-3 py-2.5">
-                  <AlertCircle size={14} className="shrink-0 mt-0.5" />
-                  <span>{submitError}</span>
-                </div>
+                <ErrorMessage message={submitError} align="start" />
               )}
 
               <button onClick={handleSubmit} disabled={submitStatus === 'loading'}

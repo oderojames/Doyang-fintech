@@ -1,3 +1,4 @@
+import ErrorMessage from '@/components/ErrorMessage';
 import { useState } from 'react';
 import { auth } from '@/lib/firebase';
 import {
@@ -183,10 +184,7 @@ export function OfferCard({ offer, cardInfo, onUpdate }: OfferCardProps) {
 
           {/* Error */}
           {declineError && (
-            <div className="flex items-center gap-2 text-destructive text-xs px-3 py-2">
-              <AlertCircle size={12} className="shrink-0" />
-              <span>{declineError}</span>
-            </div>
+            <ErrorMessage message={declineError} size="xs" />
           )}
 
           {/* Actions — pending only */}

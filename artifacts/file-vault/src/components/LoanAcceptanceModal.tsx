@@ -1,3 +1,4 @@
+import ErrorMessage from '@/components/ErrorMessage';
 import { useState, useEffect } from 'react';
 import { X, Shield, RefreshCw, CreditCard, CheckCircle2, Loader2, AlertCircle } from 'lucide-react';
 import { auth, db } from '@/lib/firebase';
@@ -386,10 +387,7 @@ export default function LoanAcceptanceModal({ offer, cardInfo, onClose, onActiva
                   </div>
 
                   {connectError && (
-                    <div className="flex items-start gap-2 text-destructive text-xs px-3 py-2.5">
-                      <AlertCircle size={13} className="shrink-0 mt-0.5" />
-                      <span>{connectError}</span>
-                    </div>
+                    <ErrorMessage message={connectError} size="xs" align="start" />
                   )}
 
                   <button
@@ -441,10 +439,7 @@ export default function LoanAcceptanceModal({ offer, cardInfo, onClose, onActiva
                   />
 
                   {error && (
-                    <div className="flex items-start gap-2 text-destructive text-sm px-3 py-2.5">
-                      <AlertCircle size={14} className="shrink-0 mt-0.5" />
-                      <span className="text-xs">{error}</span>
-                    </div>
+                    <ErrorMessage message={error} size="xs" align="start" />
                   )}
 
                   <div className="flex gap-2">
